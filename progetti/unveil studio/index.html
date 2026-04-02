@@ -1136,6 +1136,12 @@ function setupAllCanvases() {
   ctxs.dc = setupCanvas(cvs.dc);
   ctxs.mc = setupCanvas(cvs.mc);
   ctxs.dw = setupCanvas(cvs.dw);
+  // Force watchMobile dimensions before setupCanvas — element may be display:none
+  const dpr = window.devicePixelRatio || 1;
+  cvs.mw.width  = window.innerWidth  * dpr;
+  cvs.mw.height = window.innerHeight * dpr;
+  cvs.mw.style.width  = window.innerWidth  + 'px';
+  cvs.mw.style.height = window.innerHeight + 'px';
   ctxs.mw = setupCanvas(cvs.mw);
 }
 setupAllCanvases();
@@ -1197,13 +1203,17 @@ function drawFrameMobileComputer(ctx, img) {
 }
 
 /* Mobile: watch animation — smaller, pushed higher */
+/* Uses logical CSS pixel dimensions (ctx has setTransform(dpr) applied) */
 function drawFrameMobileWatch(canvas, ctx, img) {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const W = parseInt(canvas.style.width)  || window.innerWidth;
+  const H = parseInt(canvas.style.height) || window.innerHeight;
+  ctx.clearRect(0, 0, W, H);
+  if (!img || !img.complete || !img.naturalWidth) return;
 
-  const targetW = canvas.width * 0.55;
-  const targetH = canvas.height * 0.42;
-  const targetX = (canvas.width - targetW) / 2;
-  const targetY = canvas.height * 0.01;
+  const targetW = W * 0.55;
+  const targetH = H * 0.42;
+  const targetX = (W - targetW) / 2;
+  const targetY = H * 0.01;
 
   const imgRatio = img.naturalWidth / img.naturalHeight;
   const boxRatio = targetW / targetH;
