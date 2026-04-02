@@ -509,6 +509,8 @@ a{color:inherit;text-decoration:none}
   gap:2rem;max-width:1000px;margin:0 auto;
 }
 @media(max-width:768px){.res-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:768px){.card-prev{min-height:220px!important;background-size:cover!important;background-position:center!important}}
+@media(max-width:768px){.cta-btn{width:100%;max-width:340px;text-align:center;justify-content:center}}
 .res-num{
   display:block;font-family:'Syne',sans-serif;
   font-size:clamp(2rem,5vw,4rem);font-weight:900;
@@ -541,17 +543,7 @@ a{color:inherit;text-decoration:none}
   color:rgba(255,255,255,.4);font-family:'DM Sans',sans-serif;
   font-size:clamp(1.15rem,2vw,1.4rem);line-height:1.65;max-width:480px;margin:0 auto 3rem;position:relative;
 }
-.cta-form{
-  display:flex;gap:12px;max-width:480px;margin:0 auto 1rem;
-  justify-content:center;flex-wrap:wrap;position:relative;
-}
-.cta-input{
-  flex:1;min-width:220px;padding:18px 28px;
-  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
-  border-radius:100px;color:#fff;font-family:'DM Sans',sans-serif;
-  font-size:1.05rem;outline:none;transition:border-color .2s;
-}
-.cta-input:focus{border-color:rgba(var(--accent-rgb),.5)}
+.cta-action{display:flex;flex-direction:column;align-items:center;gap:1rem;margin-top:2.5rem;position:relative}
 .cta-btn{
   padding:18px 36px;background:var(--accent);color:#fff;border:none;
   border-radius:100px;font-family:'DM Sans',sans-serif;
@@ -700,7 +692,7 @@ footer{
       <span class="gar-stat-lbl" data-i18n="gar.s2l">Aprovação antes da fatura</span>
     </div>
     <div class="gar-stat">
-      <span class="gar-stat-num" data-i18n="gar.s3n">4 semanas</span>
+      <span class="gar-stat-num" data-i18n="gar.s3n">1 semana</span>
       <span class="gar-stat-lbl" data-i18n="gar.s3l">Do briefing ao site pronto</span>
     </div>
   </div>
@@ -716,19 +708,19 @@ footer{
     <p class="port-nda-note" data-i18n="port.nda">Por razões de NDA, não podemos citar todos os nossos parceiros.</p>
   </div>
   <div class="port-grid">
-    <div class="port-card" data-url="https://sevenexpansion.com.br" data-kpi="port.kpi.seven" data-sector="EXPANSÃO" data-image="assets/portfolio-seven.jpg" onclick="openModal(this)">
+    <div class="port-card" data-url="https://sevenexpansion.com.br" data-kpi="port.kpi.seven" data-sector="EXPANSÃO" data-image="assetsportfolio-seven.jpg" onclick="handleCardClick(this)">
       <div class="card-prev" style="--card-gradient:linear-gradient(135deg,#0A0A0A,#1a1a2e)"><div class="card-ov"><span data-i18n="port.view">Ver site →</span></div></div>
       <div class="card-info"><span class="card-sec">EXPANSÃO</span><h3 class="card-nm">Seven Expansion</h3><span class="card-kpi" data-i18n="port.kpi.seven">Empresa líder no Brasil em expansão de franquias</span></div>
     </div>
-    <div class="port-card" data-url="https://sorellebrasil.com" data-kpi="port.kpi.sorelle" data-sector="BELEZA & BEM-ESTAR" data-image="assets/portfolio-sorelle.jpg" onclick="openModal(this)">
+    <div class="port-card" data-url="https://sorellebrasil.com" data-kpi="port.kpi.sorelle" data-sector="PRODUÇÃO DE ALOE VERA" data-image="assetsportfolio-sorelle.jpg" onclick="handleCardClick(this)">
       <div class="card-prev" style="--card-gradient:linear-gradient(135deg,#f8b4c8,#e91e8c)"><div class="card-ov"><span data-i18n="port.view">Ver site →</span></div></div>
-      <div class="card-info"><span class="card-sec">BELEZA &amp; BEM-ESTAR</span><h3 class="card-nm">Sorelle Brasil</h3><span class="card-kpi" data-i18n="port.kpi.sorelle">Primeiro produtor de aloe vera do Brasil</span></div>
+      <div class="card-info"><span class="card-sec" data-i18n="port.sec.sorelle">PRODUÇÃO DE ALOE VERA</span><h3 class="card-nm">Sorelle Brasil</h3><span class="card-kpi" data-i18n="port.kpi.sorelle">Primeiro produtor de aloe vera do Brasil</span></div>
     </div>
-    <div class="port-card" data-url="https://creatorlabagency.com" data-kpi="port.kpi.creator" data-sector="MARKETING & CRIAÇÃO" data-image="assets/portfolio-creatorlab.jpg" onclick="openModal(this)">
+    <div class="port-card" data-url="https://creatorlabagency.com" data-kpi="port.kpi.creator" data-sector="MARKETING & CRIAÇÃO" data-image="assetsportfolio-creatorlab.jpg" onclick="handleCardClick(this)">
       <div class="card-prev" style="--card-gradient:linear-gradient(135deg,#0047FF,#00C6FF)"><div class="card-ov"><span data-i18n="port.view">Ver site →</span></div></div>
       <div class="card-info"><span class="card-sec">MARKETING &amp; CRIAÇÃO</span><h3 class="card-nm">Creator Lab Agency</h3><span class="card-kpi" data-i18n="port.kpi.creator">Primeira agência de marketing no Brasil com ecossistema completo</span></div>
     </div>
-    <div class="port-card" data-url="https://petlablatam.com" data-kpi="port.kpi.petlab" data-sector="PET & SAÚDE ANIMAL" data-image="assets/portfolio-petlab.jpg" onclick="openModal(this)">
+    <div class="port-card" data-url="https://petlablatam.com" data-kpi="port.kpi.petlab" data-sector="PET & SAÚDE ANIMAL" data-image="assetsportfolio-petlab.jpg" onclick="handleCardClick(this)">
       <div class="card-prev" style="--card-gradient:linear-gradient(135deg,#11998e,#38ef7d)"><div class="card-ov"><span data-i18n="port.view">Ver site →</span></div></div>
       <div class="card-info"><span class="card-sec">PET &amp; SAÚDE ANIMAL</span><h3 class="card-nm">Petlab LatAm</h3><span class="card-kpi" data-i18n="port.kpi.petlab">Primeira empresa na América Latina conectando produtores e marcas do setor pet</span></div>
     </div>
@@ -890,11 +882,10 @@ footer{
   <span class="cta-eye" data-i18n="cta.eye">COMECE AGORA</span>
   <h2 class="cta-head" data-i18n="cta.head">O seu site já está<br>sendo <span style="color:var(--accent)">construído.</span></h2>
   <p class="cta-sub" data-i18n="cta.sub">Veja antes de pagar. Zero risco, zero compromisso, zero adiantado.</p>
-  <div class="cta-form">
-    <input type="email" id="ctaEmail" class="cta-input" data-i18n-ph="cta.ph" placeholder="seu@empresa.com">
-    <button class="cta-btn" id="ctaBtn" data-i18n="cta.btn">Ver meu site primeiro →</button>
+  <div class="cta-action">
+    <a href="https://wa.me/5511999999999" class="cta-btn" data-i18n="cta.btn">Ver meu site primeiro →</a>
+    <p class="cta-disc" data-i18n="cta.disc">Sem cartão de crédito. Sem contrato. Só o seu novo site.</p>
   </div>
-  <p class="cta-disc" data-i18n="cta.disc">Sem cartão de crédito. Sem contrato. Só o seu novo site.</p>
 </section>
 
 <!-- ══ FOOTER ══════════════════════════════════════════════════════════════════ -->
@@ -930,18 +921,6 @@ footer{
   </div>
 </footer>
 
-<!-- AI WIDGET -->
-<div id="aiWidget">
-  <div class="ai-panel" id="aiPanel">
-    <p class="ai-panel-title" data-i18n="ai.panel.title">Como podemos ajudar?</p>
-    <p class="ai-panel-sub" data-i18n="ai.panel.sub">Tire suas dúvidas sobre o processo ou inicie seu projeto agora.</p>
-  </div>
-  <button class="ai-btn" id="aiBtn" onclick="toggleAI()">
-    <i data-lucide="message-circle" style="width:20px;height:20px;stroke-width:1.5;fill:none"></i>
-    <span data-i18n="ai.btn">Falar com IA</span>
-  </button>
-</div>
-<!-- ELEVENLABS_WIDGET -->
 
 <script>
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -959,9 +938,10 @@ pt:{
   'gar.badge':'Garantia Unveil','gar.head':'Veja o seu site.<br>Decida depois.',
   'gar.sub':'Zero adiantado. Zero risco. Construímos tudo — você aprova antes de pagar um único centavo.',
   'gar.s1l':'Sites construídos e entregues','gar.s2l':'Aprovação antes da fatura',
-  'gar.s3n':'4 semanas','gar.s3l':'Do briefing ao site pronto','gar.cta':'Ver o que construímos →',
+  'gar.s3n':'1 semana','gar.s3l':'Do briefing ao site pronto','gar.cta':'Ver o que construímos →',
   'port.eye':'PORTFÓLIO','port.head':'Empresas que transformamos.','port.sub':'Clique em qualquer card para ver o site ao vivo.','port.view':'Ver site →','port.nda':'Por razões de NDA, não podemos citar todos os nossos parceiros.','port.nda.link':'Solicite informações para ver mais exemplos →',
   'port.kpi.seven':'Empresa líder no Brasil em expansão de franquias',
+  'port.sec.sorelle':'PRODUÇÃO DE ALOE VERA',
   'port.kpi.sorelle':'Primeiro produtor de aloe vera do Brasil',
   'port.kpi.creator':'Primeira agência de marketing no Brasil com ecossistema completo',
   'port.kpi.petlab':'Primeira empresa na América Latina conectando produtores e marcas do setor pet',
@@ -1001,9 +981,10 @@ en:{
   'gar.badge':'Unveil Guarantee','gar.head':'See your site.<br>Then decide.',
   'gar.sub':'Zero upfront. Zero risk. We build it completely — you approve before paying a single euro.',
   'gar.s1l':'Sites built and delivered','gar.s2l':'Client approval before invoice',
-  'gar.s3n':'4 weeks','gar.s3l':'From brief to finished site','gar.cta':"See what we've built →",
+  'gar.s3n':'1 week','gar.s3l':'From brief to finished site','gar.cta':"See what we've built →",
   'port.eye':'PORTFOLIO','port.head':"Businesses we've transformed.",'port.sub':'Click any card to see the live site.','port.view':'View site →','port.nda':'Due to NDA agreements, we cannot name all our partners.','port.nda.link':'Request information to see more examples →',
   'port.kpi.seven':'Leading company in Brazil for franchise expansion',
+  'port.sec.sorelle':'ALOE VERA PRODUCTION',
   'port.kpi.sorelle':'First aloe vera producer in Brazil',
   'port.kpi.creator':'First marketing agency in Brazil with a complete ecosystem',
   'port.kpi.petlab':'First company in Latin America connecting producers and brands in the pet sector',
@@ -1043,9 +1024,10 @@ it:{
   'gar.badge':'Garanzia Unveil','gar.head':'Vedi il tuo sito.<br>Poi decidi.',
   'gar.sub':'Zero anticipo. Zero rischio. Lo costruiamo completamente — lo approvi prima di pagare un centesimo.',
   'gar.s1l':'Siti costruiti e consegnati','gar.s2l':'Approvazione prima della fattura',
-  'gar.s3n':'4 settimane','gar.s3l':'Dal brief al sito finito','gar.cta':'Guarda cosa abbiamo costruito →',
+  'gar.s3n':'1 settimana','gar.s3l':'Dal brief al sito finito','gar.cta':'Guarda cosa abbiamo costruito →',
   'port.eye':'PORTAFOGLIO','port.head':'Aziende che abbiamo trasformato.','port.sub':"Clicca su un'azienda per vedere il sito live.",'port.view':'Vedi sito →','port.nda':'Per accordi di NDA, non possiamo citare tutti i nostri partner.','port.nda.link':'Richiedi informazioni per vedere altri esempi →',
   'port.kpi.seven':'Azienda leader in Brasile nell\'espansione dei franchising',
+  'port.sec.sorelle':'PRODUZIONE DI ALOE VERA',
   'port.kpi.sorelle':'Primo produttore di aloe vera in Brasile',
   'port.kpi.creator':'Prima agenzia di marketing in Brasile con ecosistema completo',
   'port.kpi.petlab':'Prima azienda in America Latina che connette produttori e marchi nel settore pet',
@@ -1198,7 +1180,7 @@ function drawFrameMobile(ctx, img) {
   const targetW = W * 0.92;
   const targetH = H * 0.48;
   const targetX = W * 0.04;
-  const targetY = H * 0.04;
+  const targetY = H * 0.22;
 
   const imgRatio = img.naturalWidth / img.naturalHeight;
   const boxRatio  = targetW / targetH;
@@ -1471,6 +1453,13 @@ let lightCount = 0;
 /* ═══════════════════════════════════════════════════════════════════════════
    PORTFOLIO MODAL
 ═══════════════════════════════════════════════════════════════════════════ */
+function handleCardClick(card) {
+  if (card.classList.contains('nda')) return;
+  const url = card.dataset.url;
+  if (!url || url === '#') return;
+  if (window.innerWidth < 768) { window.open(url, '_blank'); }
+  else { openModal(card); }
+}
 function openModal(card) {
   if (card.classList.contains('nda')) return;
   document.getElementById('mSec').textContent = card.dataset.sector;
@@ -1489,26 +1478,7 @@ function closeModal(e) {
 }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   AI WIDGET
-═══════════════════════════════════════════════════════════════════════════ */
-function toggleAI() { document.getElementById('aiPanel').classList.toggle('open'); }
-setTimeout(() => document.getElementById('aiWidget').classList.add('visible'), 3000);
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   CTA FORM
-═══════════════════════════════════════════════════════════════════════════ */
-document.getElementById('ctaBtn').addEventListener('click', () => {
-  const email = document.getElementById('ctaEmail').value;
-  if (!email || !email.includes('@')) {
-    document.getElementById('ctaEmail').style.borderColor = 'rgba(255,80,80,.6)';
-    return;
-  }
-  document.getElementById('ctaEmail').style.borderColor = 'rgba(var(--accent-rgb),.5)';
-  const btn = document.getElementById('ctaBtn');
-  btn.textContent = '✓ ' + (currentLang === 'pt' ? 'Enviado!' : currentLang === 'en' ? 'Sent!' : 'Inviato!');
-  setTimeout(() => { btn.innerHTML = T[currentLang]['cta.btn']; }, 3000);
-});
 
 /* ═══════════════════════════════════════════════════════════════════════════
    INIT — called when all frames loaded
@@ -1517,12 +1487,14 @@ function initSite() {
   const loader = document.getElementById('loader');
   loader.classList.add('hide');
   setTimeout(() => { loader.style.display = 'none'; }, 700);
-  // Apply portfolio card images if files exist
+  // Apply portfolio card images
   document.querySelectorAll('.port-card[data-image]').forEach(card => {
     const prev = card.querySelector('.card-prev');
     if (!prev) return;
-    prev.style.setProperty('--card-img', `url(${card.dataset.image})`);
-    prev.setAttribute('data-image', card.dataset.image);
+    const imgPath = card.dataset.image;
+    prev.style.backgroundImage = `url('${imgPath}')`;
+    prev.style.backgroundSize = 'cover';
+    prev.style.backgroundPosition = 'center';
   });
   renderAtto1(0);
   renderAtto3(0);
