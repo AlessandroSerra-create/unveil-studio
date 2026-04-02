@@ -1171,8 +1171,8 @@ function drawFrame(ctx, img) {
   ctx.drawImage(img, drawX, drawY, drawW, drawH);
 }
 
-/* Mobile: frame top half, full width */
-function drawFrameMobile(ctx, img) {
+/* Mobile: computer animation — frame pushed down */
+function drawFrameMobileComputer(ctx, img) {
   const W = window.innerWidth, H = window.innerHeight;
   ctx.clearRect(0, 0, W, H);
   if (!img || !img.complete || !img.naturalWidth) return;
@@ -1181,6 +1181,30 @@ function drawFrameMobile(ctx, img) {
   const targetH = H * 0.48;
   const targetX = W * 0.04;
   const targetY = H * 0.22;
+
+  const imgRatio = img.naturalWidth / img.naturalHeight;
+  const boxRatio  = targetW / targetH;
+  let drawW, drawH, drawX, drawY;
+  if (imgRatio > boxRatio) {
+    drawW = targetW; drawH = targetW / imgRatio;
+    drawX = targetX; drawY = targetY + (targetH - drawH) / 2;
+  } else {
+    drawH = targetH; drawW = targetH * imgRatio;
+    drawX = targetX + (targetW - drawW) / 2; drawY = targetY;
+  }
+  ctx.drawImage(img, drawX, drawY, drawW, drawH);
+}
+
+/* Mobile: watch animation — frame near top */
+function drawFrameMobileWatch(ctx, img) {
+  const W = window.innerWidth, H = window.innerHeight;
+  ctx.clearRect(0, 0, W, H);
+  if (!img || !img.complete || !img.naturalWidth) return;
+
+  const targetW = W * 0.92;
+  const targetH = H * 0.48;
+  const targetX = W * 0.04;
+  const targetY = H * 0.04;
 
   const imgRatio = img.naturalWidth / img.naturalHeight;
   const boxRatio  = targetW / targetH;
@@ -1237,7 +1261,7 @@ function renderAtto1(p) {
     a1Frame = idx;
     const img = frames[idx];
     if (img && img.complete && img.naturalWidth) {
-      isMob ? drawFrameMobile(ctx, img) : drawFrame(ctx, img);
+      isMob ? drawFrameMobileComputer(ctx, img) : drawFrame(ctx, img);
       drawVignette(ctx, 'rgba(10,10,10,1)');
     }
   }
@@ -1270,7 +1294,7 @@ function renderAtto3(p) {
     a3Frame = idx;
     const img = frames[idx];
     if (img && img.complete && img.naturalWidth) {
-      isMob ? drawFrameMobile(ctx, img) : drawFrame(ctx, img);
+      isMob ? drawFrameMobileWatch(ctx, img) : drawFrame(ctx, img);
       drawVignette(ctx, 'rgba(255,255,255,1)');
     }
   }
