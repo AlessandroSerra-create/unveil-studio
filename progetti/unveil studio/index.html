@@ -126,7 +126,8 @@ a{color:inherit;text-decoration:none}
   transition:transform .2s,box-shadow .2s;
 }
 .nav-cta:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(var(--accent-rgb),.4)}
-@media(max-width:768px){.nav-links,.lang-sw{display:none}}
+@media(max-width:768px){.nav-links a{display:none}.lang-sw{display:flex}.nav-inner{justify-content:space-between;padding:10px 20px}}
+@media(max-width:480px){.nav-cta{padding:8px 14px;font-size:.75rem}}
 
 /* ─── DOT NAV ────────────────────────────────────────────────────────────── */
 .dot-nav{
@@ -1202,7 +1203,7 @@ function drawFrameMobileWatch(canvas, ctx, img) {
   const targetW = canvas.width * 0.55;
   const targetH = canvas.height * 0.42;
   const targetX = (canvas.width - targetW) / 2;
-  const targetY = canvas.height * -0.05;
+  const targetY = canvas.height * -0.15;
 
   const imgRatio = img.naturalWidth / img.naturalHeight;
   const boxRatio = targetW / targetH;
