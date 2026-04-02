@@ -1,0 +1,2240 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unveil Studio — See it first. Then decide.</title>
+  <meta name="description" content="Unveil Studio — We build your website completely. You see it before paying. Zero risk, zero upfront. Enterprise web design.">
+  <meta property="og:title" content="Unveil Studio — See it first. Then decide.">
+  <meta property="og:description" content="We build your website completely. You see it before paying.">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+  <link rel="apple-touch-icon" href="assets/logo.svg">
+  <link rel="alternate" hreflang="pt-BR" href="https://unveilstudio.com/">
+  <link rel="alternate" hreflang="en" href="https://unveilstudio.com/">
+  <link rel="alternate" hreflang="it" href="https://unveilstudio.com/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <style>
+    /* ── RESET & BASE ─────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-dark:    #0A0A0A;
+      --surface:    #1C1C1C;
+      --accent:     #0047FF;
+      --accent-rgb: 0, 71, 255;
+      --yellow:     #FFE000;
+      --white:      #FFFFFF;
+      --off-white:  #F5F5F0;
+      --blue-tint:  #F6F7FF;
+      --text-muted: rgba(255,255,255,0.45);
+      --text-dark:  #0A0A0A;
+      --scale: min(1, 100vw / 1920px);
+    }
+    html { scroll-behavior: auto; }
+    body {
+      background: var(--bg-dark);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    /* ── SCROLL PROGRESS BAR ──────────────────────────────────────────────── */
+    #scrollProgress {
+      position: fixed;
+      top: 0; left: 0;
+      height: 3px;
+      width: 0%;
+      background: var(--accent);
+      z-index: 10000;
+      transition: width 0.1s linear;
+    }
+
+    /* ── NAVBAR ───────────────────────────────────────────────────────────── */
+    #navbar {
+      position: fixed;
+      top: 12px; left: 0; right: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      pointer-events: none;
+      transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
+    }
+    .nav-inner {
+      width: 100%;
+      max-width: 100%;
+      padding: 14px 36px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
+      pointer-events: all;
+    }
+    #navbar.nav-scrolled .nav-inner {
+      max-width: 860px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 100px;
+      padding: 10px 24px;
+    }
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: -0.03em;
+      color: #fff;
+      cursor: pointer;
+      transition: letter-spacing 0.3s ease;
+    }
+    .nav-logo:hover { letter-spacing: 0.04em; }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+    .nav-links a {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.7);
+      transition: color 0.2s ease;
+    }
+    .nav-links a:hover { color: #fff; }
+    .lang-switcher {
+      display: flex;
+      gap: 2px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 100px;
+      padding: 3px;
+    }
+    .lang-btn {
+      background: transparent;
+      border: none;
+      color: rgba(255,255,255,0.4);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      letter-spacing: 0.05em;
+    }
+    .lang-btn.active { background: var(--accent); color: #fff; }
+    .lang-btn:hover:not(.active) { color: rgba(255,255,255,0.8); }
+    .nav-cta {
+      background: var(--accent);
+      color: #fff !important;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.88rem;
+      padding: 10px 22px;
+      border-radius: 100px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .nav-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(var(--accent-rgb),0.4);
+    }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .lang-switcher { display: none; }
+    }
+
+    /* ── DOT NAV ──────────────────────────────────────────────────────────── */
+    .dot-nav {
+      position: fixed;
+      right: 28px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 900;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: flex-end;
+    }
+    .dot-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+    .dot-item::after {
+      content: '';
+      display: block;
+      width: 8px;
+      height: 8px;
+      border-radius: 100px;
+      background: rgba(255,255,255,0.25);
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+    .dot-item.active::after {
+      background: var(--accent);
+      width: 24px;
+    }
+    .dot-label {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.5);
+      opacity: 0;
+      transform: translateX(6px);
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+    .dot-item.active .dot-label,
+    .dot-item:hover .dot-label {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    @media (max-width: 768px) { .dot-nav { display: none; } }
+
+    /* ── SECTION UTILITIES ────────────────────────────────────────────────── */
+    .section-eyebrow {
+      display: block;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent);
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 14px 32px;
+      border-radius: 100px;
+      text-decoration: none;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(var(--accent-rgb),0.4);
+    }
+
+    /* ── SECTION 01: ATTO I ───────────────────────────────────────────────── */
+    #atto1 {
+      position: relative;
+      height: 500vh;
+    }
+    .scroll-sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      width: 100%;
+      overflow: hidden;
+      background: var(--bg-dark);
+    }
+    #mainCanvas {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+    }
+    .overlay-container {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .text-overlay {
+      position: absolute;
+      left: 8%;
+      top: 50%;
+      transform: translateY(calc(-50% + 20px));
+      max-width: 600px;
+      opacity: 0;
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      pointer-events: none;
+    }
+    .text-overlay.visible {
+      opacity: 1;
+      transform: translateY(-50%);
+    }
+    .overlay-eyebrow {
+      display: block;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+    .overlay-headline {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.2rem, 5vw, 5.5rem);
+      font-weight: 900;
+      color: #fff;
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+    }
+    .overlay-sub {
+      margin-top: 1rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+      color: rgba(255,255,255,0.5);
+      line-height: 1.6;
+    }
+    .unveiled-text {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(4rem, 12vw, 14rem);
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -0.05em;
+      line-height: 0.85;
+    }
+    @media (max-width: 768px) {
+      .text-overlay {
+        left: 5%;
+        top: auto;
+        bottom: 12%;
+        transform: translateY(20px);
+        max-width: 90%;
+      }
+      .text-overlay.visible { transform: translateY(0); }
+    }
+
+    /* ── SECTION 02: GARANZIA ─────────────────────────────────────────────── */
+    #garanzia {
+      background: var(--yellow);
+      padding: 120px 32px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      clip-path: inset(0 0 100% 0);
+      transition: clip-path 0.8s cubic-bezier(0.16,1,0.3,1);
+    }
+    #garanzia.revealed { clip-path: inset(0 0 0% 0); }
+    .garanzia-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,0,0,0.08);
+      color: #0A0A0A;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 8px 20px;
+      border-radius: 100px;
+      margin-bottom: 1rem;
+    }
+    .garanzia-headline {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(3rem, 8vw, 7rem);
+      font-weight: 900;
+      color: #0A0A0A;
+      letter-spacing: -0.05em;
+      line-height: 0.9;
+      margin: 1.5rem 0;
+    }
+    .garanzia-sub {
+      font-family: 'DM Sans', sans-serif;
+      font-size: clamp(1rem, 2vw, 1.3rem);
+      color: rgba(0,0,0,0.65);
+      max-width: 560px;
+      margin: 0 auto 3rem;
+      line-height: 1.6;
+    }
+    .garanzia-stats {
+      display: flex;
+      justify-content: center;
+      gap: 4rem;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+    }
+    .garanzia-stat .stat-num {
+      display: block;
+      font-family: 'Syne', sans-serif;
+      font-size: 3rem;
+      font-weight: 900;
+      color: #0A0A0A;
+      letter-spacing: -0.04em;
+    }
+    .garanzia-stat .stat-label {
+      display: block;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem;
+      color: rgba(0,0,0,0.55);
+      margin-top: 4px;
+      max-width: 140px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .garanzia-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #0A0A0A;
+      color: var(--yellow);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 16px 36px;
+      border-radius: 100px;
+      text-decoration: none;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .garanzia-cta:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+    }
+
+    /* ── SECTION 03: PORTFOLIO ────────────────────────────────────────────── */
+    #portfolio {
+      background: #fff;
+      padding: 120px 32px;
+    }
+    .portfolio-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+    .portfolio-header h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 5vw, 4rem);
+      font-weight: 900;
+      color: #0A0A0A;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      margin: 1rem 0 0.5rem;
+    }
+    .portfolio-header p { color: #888; font-family: 'DM Sans', sans-serif; font-size: 1rem; }
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .portfolio-card {
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--blue-tint);
+      border: 1px solid #E0E4FF;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .portfolio-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 24px 60px rgba(0,71,255,0.12);
+    }
+    .card-preview {
+      position: relative;
+      aspect-ratio: 16/10;
+      overflow: hidden;
+    }
+    .preview-placeholder { width: 100%; height: 100%; }
+    .card-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,71,255,0.75);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .portfolio-card:hover .card-overlay { opacity: 1; }
+    .view-label { color: #fff; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 1.1rem; }
+    .card-info { padding: 1.25rem; }
+    .card-sector {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+    }
+    .card-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #0A0A0A;
+      margin: 4px 0;
+    }
+    .card-kpi { font-family: 'DM Sans', sans-serif; font-size: 0.82rem; color: #555; }
+
+    /* PORTFOLIO MODAL */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 5000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      backdrop-filter: blur(8px);
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal-content {
+      background: #0A0A0A;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: 2rem;
+      width: 90vw;
+      max-width: 1000px;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1.5rem;
+    }
+    .modal-sector {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+    }
+    .modal-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 4px;
+    }
+    .modal-kpi {
+      background: rgba(0,71,255,0.15);
+      color: var(--accent);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      padding: 6px 16px;
+      border-radius: 100px;
+      border: 1px solid rgba(0,71,255,0.3);
+      white-space: nowrap;
+    }
+    .modal-close {
+      position: absolute;
+      top: 1.5rem; right: 1.5rem;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #fff;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s ease;
+    }
+    .modal-close:hover { background: rgba(255,255,255,0.12); }
+    .device-frame {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: #111;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .device-frame iframe { width: 100%; height: 100%; border: none; }
+    .modal-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .modal-footer p { color: rgba(255,255,255,0.5); font-family: 'DM Sans', sans-serif; }
+
+    /* ── SECTION 04: ATTO II ──────────────────────────────────────────────── */
+    #atto2 {
+      background: var(--bg-dark);
+      padding: 120px 32px;
+    }
+    .atto2-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+    .atto2-text .section-headline {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      margin: 1rem 0 2.5rem;
+    }
+    .process-steps { display: flex; flex-direction: column; gap: 1rem; }
+    .process-step {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      padding: 1rem 1.25rem;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.02);
+      transition: all 0.4s ease;
+      cursor: default;
+    }
+    .process-step.active {
+      border-color: rgba(var(--accent-rgb),0.4);
+      background: rgba(var(--accent-rgb),0.06);
+    }
+    .step-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: rgba(255,255,255,0.15);
+      transition: color 0.4s ease;
+      min-width: 2.5rem;
+    }
+    .process-step.active .step-num { color: var(--accent); }
+    .step-title {
+      display: block;
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.6);
+      transition: color 0.4s ease;
+    }
+    .process-step.active .step-title { color: #fff; }
+    .step-time {
+      display: block;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.3);
+      margin-top: 2px;
+    }
+    .build-canvas-wrap {
+      position: relative;
+    }
+    .build-screen {
+      background: #111;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.06);
+      aspect-ratio: 4/3;
+      overflow: hidden;
+      position: relative;
+    }
+    .build-phase {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+    .build-phase.active { opacity: 1; }
+
+    /* Phase 0 */
+    #phase0 {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0A0A0A;
+    }
+    .build-cursor {
+      font-family: 'DM Sans', monospace;
+      font-size: 2rem;
+      color: var(--accent);
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    /* Phase 1 */
+    #phase1 { background: #0A0A0A; }
+    .wireframe-svg { width: 100%; height: 100%; }
+
+    /* Phase 2 */
+    #phase2 {
+      background: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 12px;
+    }
+    .proto-nav {
+      height: 32px;
+      background: #1a1a1a;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+    .proto-hero {
+      height: 120px;
+      background: linear-gradient(135deg, var(--accent), #003acc);
+      border-radius: 8px;
+      flex-shrink: 0;
+    }
+    .proto-grid {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 8px;
+      flex: 1;
+    }
+    .proto-card {
+      background: #e0e0e0;
+      border-radius: 6px;
+    }
+
+    /* Phase 3 */
+    #phase3 {
+      background: #0A0A0A;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .live-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .live-logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .live-cta {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: #fff;
+      background: var(--accent);
+      padding: 4px 12px;
+      border-radius: 100px;
+    }
+    .live-hero {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 20px 16px;
+    }
+    .live-h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      margin-bottom: 12px;
+    }
+    .live-btn {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: 100px;
+      width: fit-content;
+    }
+    .live-cards {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 8px;
+      padding: 12px 16px;
+    }
+    .live-card {
+      height: 60px;
+      background: var(--surface);
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .phase-indicator {
+      text-align: center;
+      margin-top: 1rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 0.05em;
+    }
+    @media (max-width: 768px) {
+      .atto2-inner { grid-template-columns: 1fr; gap: 3rem; }
+    }
+
+    /* ── SECTION 05: RESULTS ──────────────────────────────────────────────── */
+    #results {
+      background: var(--blue-tint);
+      padding: 120px 32px;
+      text-align: center;
+    }
+    #results h2 {
+      font-family: 'Syne', sans-serif;
+      color: #0A0A0A;
+      font-size: clamp(2rem, 5vw, 4rem);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      margin: 1rem 0 4rem;
+    }
+    .results-stats {
+      display: grid;
+      grid-template-columns: repeat(4,1fr);
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto 5rem;
+    }
+    .result-number {
+      display: block;
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 5vw, 4rem);
+      font-weight: 900;
+      color: var(--accent);
+      letter-spacing: -0.04em;
+    }
+    .result-label {
+      display: block;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem;
+      color: #666;
+      margin-top: 6px;
+    }
+    .logos-marquee {
+      overflow: hidden;
+      margin: 0 -32px 5rem;
+      padding: 2rem 0;
+      border-top: 1px solid #E0E4FF;
+      border-bottom: 1px solid #E0E4FF;
+    }
+    .logos-track {
+      display: flex;
+      gap: 4rem;
+      align-items: center;
+      animation: marquee 20s linear infinite;
+      width: max-content;
+    }
+    .logo-slot {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #B0B8D0;
+      white-space: nowrap;
+      letter-spacing: -0.02em;
+    }
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .testimonial-block {
+      max-width: 680px;
+      margin: 0 auto;
+      text-align: left;
+    }
+    .testimonial-quote {
+      font-family: 'DM Sans', sans-serif;
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      color: #0A0A0A;
+      line-height: 1.55;
+      margin-bottom: 1.5rem;
+    }
+    .testimonial-author { display: flex; align-items: center; gap: 12px; }
+    .author-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+    .author-name {
+      display: block;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      color: #0A0A0A;
+      font-size: 0.95rem;
+    }
+    .author-role {
+      display: block;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      color: #888;
+    }
+    @media (max-width: 768px) {
+      .results-stats { grid-template-columns: repeat(2,1fr); }
+    }
+
+    /* ── SECTION 06: ATTO III ─────────────────────────────────────────────── */
+    #atto3 {
+      position: relative;
+      height: 400vh;
+    }
+    #watchCanvas {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+    }
+
+    /* ── SECTION 07: CTA ──────────────────────────────────────────────────── */
+    #cta {
+      background: var(--bg-dark);
+      padding: 160px 32px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    #cta::before {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px;
+      background: var(--accent);
+      border-radius: 50%;
+      filter: blur(200px);
+      opacity: 0.08;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      pointer-events: none;
+    }
+    .cta-headline {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(3rem, 9vw, 9rem);
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -0.05em;
+      line-height: 0.9;
+      margin: 1.5rem 0 1rem;
+      position: relative;
+    }
+    .cta-sub {
+      color: rgba(255,255,255,0.4);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1.1rem;
+      max-width: 480px;
+      margin: 0 auto 3rem;
+      position: relative;
+    }
+    .cta-form {
+      display: flex;
+      gap: 12px;
+      max-width: 480px;
+      margin: 0 auto 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      position: relative;
+    }
+    .cta-input {
+      flex: 1;
+      min-width: 220px;
+      padding: 16px 24px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 100px;
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+    .cta-input:focus { border-color: rgba(var(--accent-rgb),0.5); }
+    .cta-btn {
+      padding: 16px 32px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 100px;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      animation: pulse-btn 2.5s ease-in-out infinite;
+    }
+    .cta-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(var(--accent-rgb),0.4); }
+    @keyframes pulse-btn {
+      0%,100% { box-shadow: 0 0 0 0 rgba(var(--accent-rgb),0.4); }
+      50% { box-shadow: 0 0 0 12px rgba(var(--accent-rgb),0); }
+    }
+    .cta-disclaimer {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.25);
+      position: relative;
+    }
+
+    /* ── FOOTER ───────────────────────────────────────────────────────────── */
+    footer {
+      background: var(--bg-dark);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 80px 32px 48px;
+    }
+    .footer-inner { max-width: 1200px; margin: 0 auto; }
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+    .footer-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1.3rem;
+      letter-spacing: -0.03em;
+      color: #fff;
+      display: block;
+      margin-bottom: 0.75rem;
+    }
+    .footer-brand p {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.4);
+      line-height: 1.6;
+    }
+    .footer-links { display: flex; gap: 4rem; flex-wrap: wrap; }
+    .footer-col { display: flex; flex-direction: column; gap: 0.75rem; }
+    .footer-col-title {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 0.25rem;
+    }
+    .footer-col a {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.5);
+      transition: color 0.2s ease;
+    }
+    .footer-col a:hover { color: #fff; }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .footer-bottom p {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.25);
+    }
+    .footer-socials { display: flex; gap: 1rem; align-items: center; }
+    .footer-socials a {
+      color: rgba(255,255,255,0.35);
+      transition: color 0.2s ease;
+      display: flex;
+    }
+    .footer-socials a:hover { color: #fff; }
+
+    /* ── AI WIDGET ────────────────────────────────────────────────────────── */
+    #aiWidget {
+      position: fixed;
+      bottom: 28px; right: 28px;
+      z-index: 2000;
+    }
+    .ai-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--accent);
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 14px 22px;
+      border-radius: 100px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 8px 32px rgba(var(--accent-rgb),0.4);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .ai-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(var(--accent-rgb),0.5);
+    }
+    .ai-panel {
+      position: absolute;
+      bottom: calc(100% + 12px);
+      right: 0;
+      width: 340px;
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      padding: 1.5rem;
+      display: none;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+    }
+    .ai-panel.open { display: block; animation: slideUp 0.3s ease; }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .ai-panel-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+    .ai-panel-sub {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+<!-- SCROLL PROGRESS BAR -->
+<div id="scrollProgress"></div>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <div class="nav-logo">UNVEIL.</div>
+    <div class="nav-links">
+      <a href="#portfolio" data-i18n="nav.portfolio">Portfólio</a>
+      <a href="#atto2" data-i18n="nav.process">Como funciona</a>
+      <a href="#cta" data-i18n="nav.contact">Contato</a>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div class="lang-switcher">
+        <button class="lang-btn active" data-lang="pt">PT</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="it">IT</button>
+      </div>
+      <a href="#cta" class="nav-cta" data-i18n="nav.cta">Fale conosco →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- DOT NAV -->
+<div class="dot-nav" id="dotNav">
+  <div class="dot-item active" data-section="atto1"><span class="dot-label">Intro</span></div>
+  <div class="dot-item" data-section="garanzia"><span class="dot-label">Garantia</span></div>
+  <div class="dot-item" data-section="portfolio"><span class="dot-label">Portfólio</span></div>
+  <div class="dot-item" data-section="atto2"><span class="dot-label">Processo</span></div>
+  <div class="dot-item" data-section="results"><span class="dot-label">Resultados</span></div>
+  <div class="dot-item" data-section="atto3"><span class="dot-label">Precisão</span></div>
+  <div class="dot-item" data-section="cta"><span class="dot-label">Começar</span></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     SECTION 01 — ATTO I: THE REVEAL
+══════════════════════════════════════════════════════════════════════════ -->
+<section id="atto1">
+  <div class="scroll-sticky">
+    <canvas id="mainCanvas"></canvas>
+
+    <div class="overlay-container">
+      <div class="text-overlay" id="overlay-1">
+        <span class="overlay-eyebrow" data-i18n="atto1.eyebrow1">CAPÍTULO 01</span>
+        <h2 class="overlay-headline" data-i18n="atto1.headline1">Isto é o que os seus clientes veem agora.</h2>
+      </div>
+      <div class="text-overlay" id="overlay-2">
+        <span class="overlay-eyebrow" data-i18n="atto1.eyebrow2">O PROBLEMA</span>
+        <h2 class="overlay-headline" data-i18n="atto1.headline2">Invisível.<br>Esquecível.<br>Perdendo leads.</h2>
+        <p class="overlay-sub" data-i18n="atto1.sub2">Um site que não converte não é só uma oportunidade perdida. É o melhor vendedor do seu concorrente.</p>
+      </div>
+      <div class="text-overlay" id="overlay-3">
+        <h2 class="overlay-headline" style="font-size:clamp(2rem,4vw,5rem)" data-i18n="atto1.headline3">Existe um jeito melhor.</h2>
+      </div>
+      <div class="text-overlay" id="overlay-unveiled">
+        <h1 class="unveiled-text" data-i18n="atto1.unveiled">UNVEILED.</h1>
+        <p class="overlay-sub" style="margin-top:1.5rem;color:rgba(255,255,255,0.5)" data-i18n="atto1.unveiled.sub">Você vê primeiro. Decide depois.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     SECTION 02 — GARANZIA
+══════════════════════════════════════════════════════════════════════════ -->
+<section id="garanzia">
+  <div class="garanzia-inner">
+    <div class="garanzia-badge">
+      <i data-lucide="shield-check" style="width:18px;height:18px;stroke:#0A0A0A;stroke-width:1.5;fill:none"></i>
+      <span data-i18n="guarantee.badge">Garantia Unveil</span>
+    </div>
+    <h2 class="garanzia-headline" data-i18n="guarantee.headline">Veja o seu site.<br>Decide depois.</h2>
+    <p class="garanzia-sub" data-i18n="guarantee.sub">Zero adiantado. Zero risco. Construímos tudo — você aprova antes de pagar um único centavo.</p>
+
+    <div class="garanzia-stats">
+      <div class="garanzia-stat">
+        <span class="stat-num">347</span>
+        <span class="stat-label" data-i18n="guarantee.stat1.label">Sites entregues antes do pagamento</span>
+      </div>
+      <div class="garanzia-stat">
+        <span class="stat-num">100%</span>
+        <span class="stat-label" data-i18n="guarantee.stat2.label">Aprovação do cliente antes da fatura</span>
+      </div>
+      <div class="garanzia-stat">
+        <span class="stat-num" data-i18n="guarantee.stat3.num">4 semanas</span>
+        <span class="stat-label" data-i18n="guarantee.stat3.label">Do briefing ao site pronto</span>
+      </div>
+    </div>
+
+    <a href="#portfolio" class="garanzia-cta" data-i18n="guarantee.cta">Ver o que construímos →</a>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     SECTION 03 — PORTFOLIO
+══════════════════════════════════════════════════════════════════════════ -->
+<section id="portfolio">
+  <div class="portfolio-header">
+    <span class="section-eyebrow" style="color:var(--accent)" data-i18n="portfolio.eyebrow">PORTFÓLIO</span>
+    <h2 data-i18n="portfolio.headline">Empresas que transformamos.</h2>
+    <p data-i18n="portfolio.sub">Clique em qualquer card para ver o site ao vivo.</p>
+  </div>
+
+  <div class="portfolio-grid">
+    <div class="portfolio-card" data-url="https://example.com" data-kpi="+247% tráfego" data-sector="Imóveis" onclick="openPortfolioModal(this)">
+      <div class="card-preview">
+        <div class="preview-placeholder" style="background:linear-gradient(135deg,#0047FF,#001a80)"></div>
+        <div class="card-overlay"><span class="view-label">Ver site →</span></div>
+      </div>
+      <div class="card-info">
+        <span class="card-sector">Imóveis</span>
+        <h3 class="card-name">Imobiliária Verdi</h3>
+        <span class="card-kpi">+247% tráfego orgânico</span>
+      </div>
+    </div>
+
+    <div class="portfolio-card" data-url="https://example.com" data-kpi="+189% leads" data-sector="Jurídico" onclick="openPortfolioModal(this)">
+      <div class="card-preview">
+        <div class="preview-placeholder" style="background:linear-gradient(135deg,#1a1a1a,#2d2d2d)"></div>
+        <div class="card-overlay"><span class="view-label">Ver site →</span></div>
+      </div>
+      <div class="card-info">
+        <span class="card-sector">Jurídico</span>
+        <h3 class="card-name">Advogados Ferro & Cia</h3>
+        <span class="card-kpi">+189% geração de leads</span>
+      </div>
+    </div>
+
+    <div class="portfolio-card" data-url="https://example.com" data-kpi="3.8x conversão" data-sector="Saúde" onclick="openPortfolioModal(this)">
+      <div class="card-preview">
+        <div class="preview-placeholder" style="background:linear-gradient(135deg,#00a878,#004d38)"></div>
+        <div class="card-overlay"><span class="view-label">Ver site →</span></div>
+      </div>
+      <div class="card-info">
+        <span class="card-sector">Saúde</span>
+        <h3 class="card-name">Clínica São Lucas</h3>
+        <span class="card-kpi">3.8x taxa de conversão</span>
+      </div>
+    </div>
+
+    <div class="portfolio-card" data-url="https://example.com" data-kpi="+310% MRR" data-sector="B2B SaaS" onclick="openPortfolioModal(this)">
+      <div class="card-preview">
+        <div class="preview-placeholder" style="background:linear-gradient(135deg,#6200ea,#3700b3)"></div>
+        <div class="card-overlay"><span class="view-label">Ver site →</span></div>
+      </div>
+      <div class="card-info">
+        <span class="card-sector">B2B SaaS</span>
+        <h3 class="card-name">Nexus Analytics</h3>
+        <span class="card-kpi">+310% crescimento MRR</span>
+      </div>
+    </div>
+
+    <div class="portfolio-card" data-url="https://example.com" data-kpi="+220% reservas" data-sector="Gastronomia" onclick="openPortfolioModal(this)">
+      <div class="card-preview">
+        <div class="preview-placeholder" style="background:linear-gradient(135deg,#c8860a,#8b5e06)"></div>
+        <div class="card-overlay"><span class="view-label">Ver site →</span></div>
+      </div>
+      <div class="card-info">
+        <span class="card-sector">Gastronomia</span>
+        <h3 class="card-name">Osteria Moderna</h3>
+        <span class="card-kpi">+220% reservas online</span>
+      </div>
+    </div>
+
+    <div class="portfolio-card" data-url="https://example.com" data-kpi="+175% captação" data-sector="Finanças" onclick="openPortfolioModal(this)">
+      <div class="card-preview">
+        <div class="preview-placeholder" style="background:linear-gradient(135deg,#0a2540,#1a3a5c)"></div>
+        <div class="card-overlay"><span class="view-label">Ver site →</span></div>
+      </div>
+      <div class="card-info">
+        <span class="card-sector">Finanças</span>
+        <h3 class="card-name">Capital Norte Investimentos</h3>
+        <span class="card-kpi">+175% captação de clientes</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO MODAL -->
+<div id="portfolioModal" class="modal-overlay" onclick="closePortfolioModal(event)">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closePortfolioModal()">
+      <i data-lucide="x" style="width:16px;height:16px;stroke-width:2"></i>
+    </button>
+    <div class="modal-header">
+      <div>
+        <span class="modal-sector" id="modalSector"></span>
+        <h3 class="modal-name" id="modalName"></h3>
+      </div>
+      <span class="modal-kpi" id="modalKpi"></span>
+    </div>
+    <div class="modal-device">
+      <div class="device-frame">
+        <iframe id="modalIframe" src="" title="Client site preview"></iframe>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p data-i18n="modal.cta.text">Quer um site assim?</p>
+      <a href="#cta" class="btn-primary" onclick="closePortfolioModal()" data-i18n="modal.cta.btn">Iniciar seu projeto →</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     SECTION 04 — ATTO II: THE BUILD
+══════════════════════════════════════════════════════════════════════════ -->
+<section id="atto2">
+  <div class="atto2-inner">
+    <div class="atto2-text">
+      <span class="section-eyebrow" data-i18n="atto2.eyebrow">CAPÍTULO 02</span>
+      <h2 class="section-headline" data-i18n="atto2.headline">Quatro semanas.<br>Um site que dura anos.</h2>
+      <div class="process-steps" id="processSteps">
+        <div class="process-step active" data-phase="0">
+          <span class="step-num">01</span>
+          <div>
+            <span class="step-title" data-i18n="atto2.step1">Briefing & Estratégia</span>
+            <span class="step-time" data-i18n="atto2.step1.time">3 dias</span>
+          </div>
+        </div>
+        <div class="process-step" data-phase="1">
+          <span class="step-num">02</span>
+          <div>
+            <span class="step-title" data-i18n="atto2.step2">Design</span>
+            <span class="step-time" data-i18n="atto2.step2.time">1 semana</span>
+          </div>
+        </div>
+        <div class="process-step" data-phase="2">
+          <span class="step-num">03</span>
+          <div>
+            <span class="step-title" data-i18n="atto2.step3">Desenvolvimento</span>
+            <span class="step-time" data-i18n="atto2.step3.time">2 semanas</span>
+          </div>
+        </div>
+        <div class="process-step" data-phase="3">
+          <span class="step-num">04</span>
+          <div>
+            <span class="step-title" data-i18n="atto2.step4">Deploy & Entrega</span>
+            <span class="step-time" data-i18n="atto2.step4.time">1 dia</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="build-canvas-wrap">
+      <div class="build-screen" id="buildScreen">
+        <div class="build-phase active" id="phase0">
+          <div class="build-cursor">_</div>
+        </div>
+        <div class="build-phase" id="phase1">
+          <svg class="wireframe-svg" id="wireframeSvg" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="10" width="380" height="30" rx="4" fill="none" stroke="rgba(0,71,255,0.4)" stroke-width="1.5" class="wf-line"/>
+            <rect x="10" y="55" width="380" height="120" rx="4" fill="none" stroke="rgba(0,71,255,0.3)" stroke-width="1.5" class="wf-line"/>
+            <rect x="10" y="190" width="120" height="100" rx="4" fill="none" stroke="rgba(0,71,255,0.2)" stroke-width="1.5" class="wf-line"/>
+            <rect x="140" y="190" width="120" height="100" rx="4" fill="none" stroke="rgba(0,71,255,0.2)" stroke-width="1.5" class="wf-line"/>
+            <rect x="270" y="190" width="120" height="100" rx="4" fill="none" stroke="rgba(0,71,255,0.2)" stroke-width="1.5" class="wf-line"/>
+            <line x1="30" y1="85" x2="200" y2="85" stroke="rgba(255,255,255,0.15)" stroke-width="1" class="wf-line"/>
+            <line x1="30" y1="105" x2="280" y2="105" stroke="rgba(255,255,255,0.1)" stroke-width="1" class="wf-line"/>
+            <line x1="30" y1="125" x2="240" y2="125" stroke="rgba(255,255,255,0.1)" stroke-width="1" class="wf-line"/>
+            <rect x="30" y="145" width="80" height="16" rx="8" fill="rgba(0,71,255,0.3)" class="wf-line"/>
+          </svg>
+        </div>
+        <div class="build-phase" id="phase2">
+          <div class="proto-nav"></div>
+          <div class="proto-hero"></div>
+          <div class="proto-grid">
+            <div class="proto-card"></div>
+            <div class="proto-card"></div>
+            <div class="proto-card"></div>
+          </div>
+        </div>
+        <div class="build-phase" id="phase3">
+          <div class="live-nav">
+            <span class="live-logo">UNVEIL.</span>
+            <span class="live-cta">Ver meu site →</span>
+          </div>
+          <div class="live-hero">
+            <div class="live-h1">O seu site.<br>Construído para converter.</div>
+            <div class="live-btn">Ver primeiro →</div>
+          </div>
+          <div class="live-cards">
+            <div class="live-card"></div>
+            <div class="live-card"></div>
+            <div class="live-card"></div>
+          </div>
+        </div>
+      </div>
+      <div class="phase-indicator">
+        <span id="phaseLabel">Inicializando...</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     SECTION 05 — RESULTS
+══════════════════════════════════════════════════════════════════════════ -->
+<section id="results">
+  <div class="results-inner" style="max-width:1200px;margin:0 auto">
+    <span class="section-eyebrow" style="color:var(--accent)" data-i18n="results.eyebrow">RESULTADOS</span>
+    <h2 data-i18n="results.headline">Números que falam<br>por si mesmos.</h2>
+
+    <div class="results-stats" id="resultsStats">
+      <div class="result-stat">
+        <span class="result-number" data-target="247" data-prefix="+" data-suffix="%">+247%</span>
+        <span class="result-label" data-i18n="results.stat1.label">Aumento médio de tráfego</span>
+      </div>
+      <div class="result-stat">
+        <span class="result-number" data-target="3.2" data-suffix="x">3.2x</span>
+        <span class="result-label" data-i18n="results.stat2.label">Taxa de conversão média</span>
+      </div>
+      <div class="result-stat">
+        <span class="result-number" data-target="72" data-suffix="h">72h</span>
+        <span class="result-label" data-i18n="results.stat3.label">Do briefing ao primeiro wireframe</span>
+      </div>
+      <div class="result-stat">
+        <span class="result-number" data-target="347" data-suffix="">347</span>
+        <span class="result-label" data-i18n="results.stat4.label">Sites construídos e entregues</span>
+      </div>
+    </div>
+
+    <div class="logos-marquee">
+      <div class="logos-track">
+        <div class="logo-slot">IMOBILIÁRIA VERDI</div>
+        <div class="logo-slot">FERRO & CIA</div>
+        <div class="logo-slot">CLÍNICA SÃO LUCAS</div>
+        <div class="logo-slot">NEXUS ANALYTICS</div>
+        <div class="logo-slot">OSTERIA MODERNA</div>
+        <div class="logo-slot">CAPITAL NORTE</div>
+        <div class="logo-slot">TECH SOLUTIONS</div>
+        <div class="logo-slot">GRUPO ALFA</div>
+        <div class="logo-slot">IMOBILIÁRIA VERDI</div>
+        <div class="logo-slot">FERRO & CIA</div>
+        <div class="logo-slot">CLÍNICA SÃO LUCAS</div>
+        <div class="logo-slot">NEXUS ANALYTICS</div>
+      </div>
+    </div>
+
+    <div class="testimonial-block">
+      <p class="testimonial-quote" data-i18n="results.quote">"A Unveil construiu nosso site em 3,5 semanas. Vimos o design completo antes de pagar. O tráfego aumentou 310% nos primeiros dois meses."</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">MB</div>
+        <div>
+          <span class="author-name" data-i18n="results.author">Marco Bianchi</span>
+          <span class="author-role" data-i18n="results.role">CEO, Studio Bianchi Imóveis</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     SECTION 06 — ATTO III: THE WATCH
+══════════════════════════════════════════════════════════════════════════ -->
+<section id="atto3">
+  <div class="scroll-sticky">
+    <canvas id="watchCanvas"></canvas>
+
+    <div class="overlay-container">
+      <div class="text-overlay" id="watch-overlay-1">
+        <span class="overlay-eyebrow" data-i18n="atto3.eyebrow1">CAPÍTULO 03</span>
+        <h2 class="overlay-headline" data-i18n="atto3.headline1">Este é o nível de detalhe que aplicamos.</h2>
+      </div>
+      <div class="text-overlay" id="watch-overlay-2">
+        <span class="overlay-eyebrow" data-i18n="atto3.eyebrow2">PRECISÃO</span>
+        <h2 class="overlay-headline" data-i18n="atto3.headline2">347 componentes.<br>Cada um no seu lugar.</h2>
+        <p class="overlay-sub" data-i18n="atto3.sub2">Cada linha de código. Cada pixel. Cada interação. Engenheirado com a mesma precisão de um Grande Complication.</p>
+      </div>
+      <div class="text-overlay" id="watch-overlay-3">
+        <h2 class="overlay-headline" style="font-size:clamp(2rem,4vw,5rem)" data-i18n="atto3.headline3">O seu site merece<br>esta precisão.</h2>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     SECTION 07 — CTA FINALE
+══════════════════════════════════════════════════════════════════════════ -->
+<section id="cta">
+  <span class="section-eyebrow" style="color:rgba(255,255,255,0.4)" data-i18n="cta.eyebrow">COMECE AGORA</span>
+  <h2 class="cta-headline" data-i18n="cta.headline">O seu site já está<br>sendo <span style="color:var(--accent)">construído.</span></h2>
+  <p class="cta-sub" data-i18n="cta.sub">Veja antes de pagar. Zero risco, zero compromisso, zero adiantado.</p>
+
+  <div class="cta-form">
+    <input type="email" class="cta-input" id="ctaEmail" data-i18n-placeholder="cta.placeholder" placeholder="seu@empresa.com">
+    <button class="cta-btn" id="ctaBtn" data-i18n="cta.btn">Ver meu site primeiro →</button>
+  </div>
+  <p class="cta-disclaimer" data-i18n="cta.disclaimer">Sem cartão de crédito. Sem contrato. Só o seu novo site.</p>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <span class="footer-logo">UNVEIL.</span>
+        <p data-i18n="footer.tagline">Construímos sites que convertem.<br>Você vê antes de pagar.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <span class="footer-col-title" data-i18n="footer.company">Empresa</span>
+          <a href="#portfolio" data-i18n="nav.portfolio">Portfólio</a>
+          <a href="#atto2" data-i18n="nav.process">Como funciona</a>
+          <a href="#results" data-i18n="results.eyebrow">Resultados</a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title" data-i18n="footer.legal">Legal</span>
+          <a href="#" data-i18n="footer.privacy">Política de Privacidade</a>
+          <a href="#" data-i18n="footer.terms">Termos de Serviço</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p data-i18n="footer.copy">© 2026 Unveil Studio. Todos os direitos reservados.</p>
+      <div class="footer-socials">
+        <a href="#" aria-label="LinkedIn"><i data-lucide="linkedin" style="width:20px;height:20px;stroke-width:1.5;fill:none"></i></a>
+        <a href="#" aria-label="Instagram"><i data-lucide="instagram" style="width:20px;height:20px;stroke-width:1.5;fill:none"></i></a>
+        <a href="#" aria-label="Twitter"><i data-lucide="twitter" style="width:20px;height:20px;stroke-width:1.5;fill:none"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     AI WIDGET
+══════════════════════════════════════════════════════════════════════════ -->
+<div id="aiWidget">
+  <div class="ai-panel" id="aiPanel">
+    <p class="ai-panel-title">Fale com a IA →</p>
+    <p class="ai-panel-sub">Tire suas dúvidas ou inicie seu projeto agora mesmo.</p>
+  </div>
+  <button class="ai-btn" id="aiToggle" onclick="toggleAi()">
+    <i data-lucide="message-circle" style="width:20px;height:20px;stroke-width:1.5;fill:none"></i>
+    <span data-i18n="ai.btn">Falar com IA</span>
+  </button>
+</div>
+<!-- ELEVENLABS_WIDGET -->
+
+<script>
+// ═══════════════════════════════════════════════════════════════════════════
+// i18n TRANSLATIONS
+// ═══════════════════════════════════════════════════════════════════════════
+const TRANSLATIONS = {
+  pt: {
+    'nav.portfolio':'Portfólio','nav.process':'Como funciona','nav.contact':'Contato','nav.cta':'Fale conosco →',
+    'atto1.eyebrow1':'CAPÍTULO 01','atto1.headline1':'Isto é o que os seus clientes veem agora.',
+    'atto1.eyebrow2':'O PROBLEMA','atto1.headline2':'Invisível.\nEsquecível.\nPerdendo leads.',
+    'atto1.sub2':'Um site que não converte não é só uma oportunidade perdida. É o melhor vendedor do seu concorrente.',
+    'atto1.headline3':'Existe um jeito melhor.','atto1.unveiled':'UNVEILED.','atto1.unveiled.sub':'Você vê primeiro. Decide depois.',
+    'guarantee.badge':'Garantia Unveil','guarantee.headline':'Veja o seu site.\nDecida depois.',
+    'guarantee.sub':'Zero adiantado. Zero risco. Construímos tudo — você aprova antes de pagar um único centavo.',
+    'guarantee.stat1.label':'Sites entregues antes do pagamento','guarantee.stat2.label':'Aprovação do cliente antes da fatura',
+    'guarantee.stat3.label':'Do briefing ao site pronto','guarantee.stat3.num':'4 semanas','guarantee.cta':'Ver o que construímos →',
+    'portfolio.eyebrow':'PORTFÓLIO','portfolio.headline':'Empresas que transformamos.','portfolio.sub':'Clique em qualquer card para ver o site ao vivo.',
+    'atto2.eyebrow':'CAPÍTULO 02','atto2.headline':'Quatro semanas.\nUm site que dura anos.',
+    'atto2.step1':'Briefing & Estratégia','atto2.step1.time':'3 dias','atto2.step2':'Design','atto2.step2.time':'1 semana',
+    'atto2.step3':'Desenvolvimento','atto2.step3.time':'2 semanas','atto2.step4':'Deploy & Entrega','atto2.step4.time':'1 dia',
+    'results.eyebrow':'RESULTADOS','results.headline':'Números que falam por si mesmos.',
+    'results.stat1.label':'Aumento médio de tráfego','results.stat2.label':'Taxa de conversão média',
+    'results.stat3.label':'Do briefing ao primeiro wireframe','results.stat4.label':'Sites construídos e entregues',
+    'results.quote':'"A Unveil construiu nosso site em 3,5 semanas. Vimos o design completo antes de pagar. O tráfego aumentou 310% nos primeiros dois meses."',
+    'results.author':'Marco Bianchi','results.role':'CEO, Studio Bianchi Imóveis',
+    'atto3.eyebrow1':'CAPÍTULO 03','atto3.headline1':'Este é o nível de detalhe que aplicamos.',
+    'atto3.eyebrow2':'PRECISÃO','atto3.headline2':'347 componentes.\nCada um no seu lugar.',
+    'atto3.sub2':'Cada linha de código. Cada pixel. Cada interação. Engenheirado com a mesma precisão de um Grande Complication.',
+    'atto3.headline3':'O seu site merece\nesta precisão.',
+    'cta.eyebrow':'COMECE AGORA','cta.headline':'O seu site já está\nsendo construído.',
+    'cta.sub':'Veja antes de pagar. Zero risco, zero compromisso, zero adiantado.',
+    'cta.placeholder':'seu@empresa.com','cta.btn':'Ver meu site primeiro →',
+    'cta.disclaimer':'Sem cartão de crédito. Sem contrato. Só o seu novo site.',
+    'footer.tagline':'Construímos sites que convertem.\nVocê vê antes de pagar.',
+    'footer.company':'Empresa','footer.legal':'Legal','footer.privacy':'Política de Privacidade',
+    'footer.terms':'Termos de Serviço','footer.copy':'© 2026 Unveil Studio. Todos os direitos reservados.',
+    'modal.cta.text':'Quer um site assim?','modal.cta.btn':'Iniciar seu projeto →','ai.btn':'Falar com IA',
+  },
+  en: {
+    'nav.portfolio':'Portfolio','nav.process':'How it works','nav.contact':'Contact','nav.cta':'Talk to us →',
+    'atto1.eyebrow1':'CHAPTER 01','atto1.headline1':'This is what your clients see right now.',
+    'atto1.eyebrow2':'THE PROBLEM','atto1.headline2':'Invisible.\nForgettable.\nLosing you leads.',
+    'atto1.sub2':"A site that doesn't convert isn't just a missed opportunity. It's your competitor's best salesperson.",
+    'atto1.headline3':"There's a better way.",'atto1.unveiled':'UNVEILED.','atto1.unveiled.sub':'You see it first. Then you decide.',
+    'guarantee.badge':'Unveil Guarantee','guarantee.headline':'See your site.\nThen decide.',
+    'guarantee.sub':'Zero upfront. Zero risk. We build it completely — you approve before paying a single euro.',
+    'guarantee.stat1.label':'Sites delivered before payment','guarantee.stat2.label':'Client approval before invoice',
+    'guarantee.stat3.label':'From brief to finished site','guarantee.stat3.num':'4 weeks',"guarantee.cta":"See what we've built →",
+    'portfolio.eyebrow':'PORTFOLIO',"portfolio.headline":"Businesses we've transformed.",'portfolio.sub':'Click any card to see the live site.',
+    'atto2.eyebrow':'CHAPTER 02','atto2.headline':'Four weeks.\nA site that lasts years.',
+    'atto2.step1':'Brief & Strategy','atto2.step1.time':'3 days','atto2.step2':'Design','atto2.step2.time':'1 week',
+    'atto2.step3':'Build','atto2.step3.time':'2 weeks','atto2.step4':'Deploy & Handover','atto2.step4.time':'1 day',
+    'results.eyebrow':'RESULTS','results.headline':'Numbers that speak for themselves.',
+    'results.stat1.label':'Average traffic increase','results.stat2.label':'Average conversion rate',
+    'results.stat3.label':'Brief to first wireframe','results.stat4.label':'Sites built and delivered',
+    'results.quote':'"Unveil built our site in 3.5 weeks. We saw the full design before paying anything. Traffic went up 310% in the first two months."',
+    'results.author':'Marco Bianchi','results.role':'CEO, Studio Bianchi Real Estate',
+    'atto3.eyebrow1':'CHAPTER 03','atto3.headline1':'This is the level of detail we bring.',
+    'atto3.eyebrow2':'CRAFT','atto3.headline2':'347 components.\nEvery one in its place.',
+    'atto3.sub2':'Every line of code. Every pixel. Every interaction. Engineered with the same precision as a Grande Complication.',
+    'atto3.headline3':'Your site deserves\nthis precision.',
+    'cta.eyebrow':'GET STARTED','cta.headline':'Your site is already\nbeing built.',
+    'cta.sub':'See it before you pay. Zero risk, zero commitment, zero upfront.',
+    'cta.placeholder':'your@company.com','cta.btn':'See my site first →',
+    'cta.disclaimer':'No credit card. No contract. Just your new site.',
+    'footer.tagline':'We build sites that convert.\nYou see it before you pay.',
+    'footer.company':'Company','footer.legal':'Legal','footer.privacy':'Privacy Policy',
+    'footer.terms':'Terms of Service','footer.copy':'© 2026 Unveil Studio. All rights reserved.',
+    'modal.cta.text':'Want a site like this?','modal.cta.btn':'Start your project →','ai.btn':'Chat with us',
+  },
+  it: {
+    'nav.portfolio':'Portafoglio','nav.process':'Come funziona','nav.contact':'Contatti','nav.cta':'Parla con noi →',
+    'atto1.eyebrow1':'CAPITOLO 01','atto1.headline1':'Questo è quello che vedono i tuoi clienti adesso.',
+    'atto1.eyebrow2':'IL PROBLEMA','atto1.headline2':'Invisibile.\nDimenticabile.\nPerdendo lead.',
+    'atto1.sub2':"Un sito che non converte non è solo un'opportunità persa. È il miglior venditore del tuo concorrente.",
+    'atto1.headline3':'Esiste un modo migliore.','atto1.unveiled':'UNVEILED.','atto1.unveiled.sub':'Lo vedi prima. Poi decidi.',
+    'guarantee.badge':'Garanzia Unveil','guarantee.headline':'Vedi il tuo sito.\nPoi decidi.',
+    'guarantee.sub':'Zero anticipo. Zero rischio. Lo costruiamo completamente — lo approvi prima di pagare un centesimo.',
+    'guarantee.stat1.label':'Siti consegnati prima del pagamento','guarantee.stat2.label':'Approvazione cliente prima della fattura',
+    'guarantee.stat3.label':'Dal brief al sito finito','guarantee.stat3.num':'4 settimane','guarantee.cta':'Guarda cosa abbiamo costruito →',
+    'portfolio.eyebrow':'PORTAFOGLIO','portfolio.headline':'Aziende che abbiamo trasformato.','portfolio.sub':"Clicca su un'azienda per vedere il sito live.",
+    'atto2.eyebrow':'CAPITOLO 02','atto2.headline':'Quattro settimane.\nUn sito che dura anni.',
+    'atto2.step1':'Brief & Strategia','atto2.step1.time':'3 giorni','atto2.step2':'Design','atto2.step2.time':'1 settimana',
+    'atto2.step3':'Sviluppo','atto2.step3.time':'2 settimane','atto2.step4':'Deploy & Consegna','atto2.step4.time':'1 giorno',
+    'results.eyebrow':'RISULTATI','results.headline':'Numeri che parlano da soli.',
+    'results.stat1.label':'Aumento medio del traffico','results.stat2.label':'Tasso di conversione medio',
+    'results.stat3.label':'Dal brief al primo wireframe','results.stat4.label':'Siti costruiti e consegnati',
+    'results.quote':'"Unveil ha costruito il nostro sito in 3,5 settimane. Abbiamo visto il design completo prima di pagare. Il traffico è aumentato del 310% nei primi due mesi."',
+    'results.author':'Marco Bianchi','results.role':'CEO, Studio Bianchi Immobiliare',
+    'atto3.eyebrow1':'CAPITOLO 03','atto3.headline1':'Questo è il livello di dettaglio che portiamo.',
+    'atto3.eyebrow2':'PRECISIONE','atto3.headline2':'347 componenti.\nOgnuno al suo posto.',
+    'atto3.sub2':'Ogni riga di codice. Ogni pixel. Ogni interazione. Ingegnerizzato con la stessa precisione di un Grande Complication.',
+    'atto3.headline3':'Il tuo sito merita\nquesta precisione.',
+    'cta.eyebrow':'INIZIA ORA','cta.headline':'Il tuo sito è già\nin costruzione.',
+    'cta.sub':'Vedilo prima di pagare. Zero rischio, zero impegno, zero anticipo.',
+    'cta.placeholder':'tuo@azienda.com','cta.btn':'Guarda il mio sito prima →',
+    'cta.disclaimer':'Nessuna carta di credito. Nessun contratto. Solo il tuo nuovo sito.',
+    'footer.tagline':'Costruiamo siti che convertono.\nLo vedi prima di pagare.',
+    'footer.company':'Azienda','footer.legal':'Legale','footer.privacy':'Privacy Policy',
+    'footer.terms':'Termini di Servizio','footer.copy':'© 2026 Unveil Studio. Tutti i diritti riservati.',
+    'modal.cta.text':'Vuoi un sito così?','modal.cta.btn':'Inizia il tuo progetto →','ai.btn':'Chatta con noi',
+  }
+};
+
+let currentLang = 'pt';
+
+function setLang(lang) {
+  currentLang = lang;
+  const t = TRANSLATIONS[lang];
+  document.documentElement.lang = lang === 'pt' ? 'pt-BR' : lang;
+
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    if (!t[key]) return;
+    const isHeadline = el.tagName === 'H1' || el.tagName === 'H2' || el.classList.contains('overlay-headline') || el.classList.contains('unveiled-text') || el.classList.contains('garanzia-headline') || el.classList.contains('cta-headline') || el.classList.contains('section-headline');
+    if (isHeadline) {
+      el.innerHTML = t[key].replace(/\n/g, '<br>');
+    } else if (el.tagName === 'INPUT') {
+      el.placeholder = t[key];
+    } else {
+      el.textContent = t[key];
+    }
+  });
+
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.dataset.i18nPlaceholder;
+    if (t[key]) el.placeholder = t[key];
+  });
+
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.lang === lang);
+  });
+
+  localStorage.setItem('unveil-lang', lang);
+}
+
+document.querySelectorAll('.lang-btn').forEach(btn => {
+  btn.addEventListener('click', () => setLang(btn.dataset.lang));
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// SCROLL PROGRESS BAR
+// ═══════════════════════════════════════════════════════════════════════════
+const scrollProgressEl = document.getElementById('scrollProgress');
+window.addEventListener('scroll', () => {
+  const pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+  scrollProgressEl.style.width = pct + '%';
+}, { passive: true });
+
+// ═══════════════════════════════════════════════════════════════════════════
+// NAVBAR
+// ═══════════════════════════════════════════════════════════════════════════
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('nav-scrolled', window.scrollY > 80);
+}, { passive: true });
+
+// ═══════════════════════════════════════════════════════════════════════════
+// DOT NAV
+// ═══════════════════════════════════════════════════════════════════════════
+const dotItems = document.querySelectorAll('.dot-item');
+const sections = ['atto1','garanzia','portfolio','atto2','results','atto3','cta'];
+
+function updateDotNav() {
+  let current = sections[0];
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (window.scrollY >= el.offsetTop - window.innerHeight / 2) current = id;
+  });
+  dotItems.forEach(dot => {
+    dot.classList.toggle('active', dot.dataset.section === current);
+  });
+}
+window.addEventListener('scroll', updateDotNav, { passive: true });
+dotItems.forEach(dot => {
+  dot.addEventListener('click', () => {
+    const target = document.getElementById(dot.dataset.section);
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// SECTION 01 — ATTO I CANVAS PLACEHOLDER
+// ═══════════════════════════════════════════════════════════════════════════
+const USE_REAL_VIDEO = false; // set true when assets/clip*.mp4 exist
+
+const mainCanvas = document.getElementById('mainCanvas');
+const mainCtx = mainCanvas.getContext('2d');
+let atto1Frame = null;
+const isMobile = () => window.innerWidth < 768;
+
+function resizeMainCanvas() {
+  const dpr = window.devicePixelRatio || 1;
+  mainCanvas.width = window.innerWidth * dpr;
+  mainCanvas.height = window.innerHeight * dpr;
+  mainCanvas.style.width = window.innerWidth + 'px';
+  mainCanvas.style.height = window.innerHeight + 'px';
+  mainCtx.scale(dpr, dpr);
+}
+resizeMainCanvas();
+window.addEventListener('resize', resizeMainCanvas);
+
+function drawAtto1Placeholder(progress) {
+  const W = window.innerWidth;
+  const H = window.innerHeight;
+  mainCtx.clearRect(0, 0, W, H);
+  mainCtx.fillStyle = '#0A0A0A';
+  mainCtx.fillRect(0, 0, W, H);
+
+  let clipIndex, clipProgress;
+  if (progress < 0.33)       { clipIndex = 0; clipProgress = progress / 0.33; }
+  else if (progress < 0.68)  { clipIndex = 1; clipProgress = (progress - 0.33) / 0.35; }
+  else if (progress < 0.88)  { clipIndex = 2; clipProgress = (progress - 0.68) / 0.20; }
+  else                       { clipIndex = 3; clipProgress = 1; }
+
+  const cx = W / 2;
+  const cy = H / 2;
+  const mob = isMobile();
+  const w = mob ? W * 0.75 : W * 0.52;
+  const h = w * 0.625;
+
+  mainCtx.save();
+
+  if (clipIndex === 0) {
+    const angle = clipProgress * 110;
+    const lidOpen = Math.sin((angle * Math.PI) / 180);
+
+    // Base body
+    mainCtx.fillStyle = '#2A2A2A';
+    mainCtx.beginPath();
+    mainCtx.roundRect(cx - w/2, cy + h * 0.06, w, h * 0.11, 6);
+    mainCtx.fill();
+    // Trackpad notch
+    mainCtx.fillStyle = '#222';
+    mainCtx.beginPath();
+    mainCtx.roundRect(cx - 30, cy + h * 0.1, 60, h * 0.04, 3);
+    mainCtx.fill();
+
+    if (lidOpen > 0.04) {
+      const screenH = h * 0.72 * lidOpen;
+      // Screen bezel
+      mainCtx.fillStyle = '#1A1A1A';
+      mainCtx.beginPath();
+      mainCtx.roundRect(cx - w * 0.47, cy + h * 0.05 - screenH, w * 0.94, screenH, [10, 10, 0, 0]);
+      mainCtx.fill();
+
+      if (lidOpen > 0.45) {
+        const alpha = Math.min(1, (lidOpen - 0.45) * 2);
+        // Screen white background
+        mainCtx.globalAlpha = alpha;
+        mainCtx.fillStyle = '#f2f2f2';
+        mainCtx.beginPath();
+        mainCtx.roundRect(cx - w * 0.44, cy + h * 0.05 - screenH * 0.97, w * 0.88, screenH * 0.91, [6, 6, 0, 0]);
+        mainCtx.fill();
+        // Mediocre site navbar
+        mainCtx.fillStyle = '#1a3a6b';
+        mainCtx.fillRect(cx - w * 0.44, cy + h * 0.05 - screenH * 0.97, w * 0.88, screenH * 0.08);
+        // Nav text
+        mainCtx.fillStyle = '#fff';
+        mainCtx.font = `bold ${Math.round(screenH * 0.045)}px Georgia, serif`;
+        mainCtx.textAlign = 'center';
+        mainCtx.fillText('Welcome to Our Company', cx, cy + h * 0.05 - screenH * 0.97 + screenH * 0.06);
+        // Fake content rows
+        mainCtx.fillStyle = '#e0e0e0';
+        for (let i = 0; i < 3; i++) {
+          mainCtx.fillRect(cx - w * 0.40, cy + h * 0.05 - screenH * 0.85 + i * screenH * 0.1, w * 0.8, screenH * 0.07);
+        }
+        mainCtx.globalAlpha = 1;
+      }
+      // Glow on keyboard
+      if (lidOpen > 0.3) {
+        const gA = (lidOpen - 0.3) * 0.35;
+        const g = mainCtx.createRadialGradient(cx, cy + h * 0.07, 0, cx, cy + h * 0.07, w * 0.45);
+        g.addColorStop(0, `rgba(200,215,255,${gA})`);
+        g.addColorStop(1, 'rgba(0,0,0,0)');
+        mainCtx.fillStyle = g;
+        mainCtx.fillRect(cx - w/2, cy - h * 0.3, w, h * 0.5);
+      }
+    }
+
+  } else if (clipIndex === 1) {
+    const scrollOff = clipProgress * 0.65;
+    // Base
+    mainCtx.fillStyle = '#2A2A2A';
+    mainCtx.beginPath();
+    mainCtx.roundRect(cx - w/2, cy + h * 0.06, w, h * 0.11, 6);
+    mainCtx.fill();
+    // Screen
+    mainCtx.fillStyle = '#1A1A1A';
+    mainCtx.beginPath();
+    mainCtx.roundRect(cx - w * 0.47, cy - h * 0.67, w * 0.94, h * 0.73, [10, 10, 0, 0]);
+    mainCtx.fill();
+    // Scrolling site content
+    mainCtx.save();
+    mainCtx.beginPath();
+    mainCtx.roundRect(cx - w * 0.44, cy - h * 0.64, w * 0.88, h * 0.68, 4);
+    mainCtx.clip();
+    const yOff = -scrollOff * h * 1.4;
+    mainCtx.fillStyle = '#f2f2f2';
+    mainCtx.fillRect(cx - w * 0.44, cy - h * 0.64 + yOff, w * 0.88, h * 1.6);
+    mainCtx.fillStyle = '#1a3a6b';
+    mainCtx.fillRect(cx - w * 0.44, cy - h * 0.64 + yOff, w * 0.88, h * 0.055);
+    for (let i = 0; i < 10; i++) {
+      const rowY = cy - h * 0.57 + yOff + i * h * 0.1;
+      mainCtx.fillStyle = i % 2 === 0 ? '#e8e8e8' : '#d5d5d5';
+      mainCtx.beginPath();
+      mainCtx.roundRect(cx - w * 0.40, rowY, w * 0.8, h * 0.08, 4);
+      mainCtx.fill();
+    }
+    mainCtx.restore();
+    // Keyboard glow
+    const g2 = mainCtx.createRadialGradient(cx, cy + h * 0.07, 0, cx, cy + h * 0.07, w * 0.5);
+    g2.addColorStop(0, 'rgba(200,215,255,0.18)');
+    g2.addColorStop(1, 'rgba(0,0,0,0)');
+    mainCtx.fillStyle = g2;
+    mainCtx.fillRect(cx - w/2, cy - h * 0.15, w, h * 0.3);
+
+  } else if (clipIndex === 2) {
+    const dimA = Math.max(0, 1 - clipProgress * 1.2);
+    mainCtx.fillStyle = '#2A2A2A';
+    mainCtx.beginPath();
+    mainCtx.roundRect(cx - w/2, cy + h * 0.06, w, h * 0.11, 6);
+    mainCtx.fill();
+    mainCtx.globalAlpha = dimA;
+    mainCtx.fillStyle = '#1A1A1A';
+    mainCtx.beginPath();
+    mainCtx.roundRect(cx - w * 0.47, cy - h * 0.67, w * 0.94, h * 0.73, [10, 10, 0, 0]);
+    mainCtx.fill();
+    mainCtx.fillStyle = '#f2f2f2';
+    mainCtx.beginPath();
+    mainCtx.roundRect(cx - w * 0.44, cy - h * 0.64, w * 0.88, h * 0.68, 4);
+    mainCtx.fill();
+    mainCtx.globalAlpha = 1;
+    mainCtx.strokeStyle = 'rgba(255,255,255,0.06)';
+    mainCtx.lineWidth = 1;
+    mainCtx.beginPath();
+    mainCtx.roundRect(cx - w * 0.47, cy - h * 0.67, w * 0.94, h * 0.73, [10, 10, 0, 0]);
+    mainCtx.stroke();
+  }
+
+  // Placeholder label
+  if (clipIndex < 3) {
+    mainCtx.globalAlpha = 0.2;
+    mainCtx.fillStyle = '#888';
+    mainCtx.font = '13px DM Sans, sans-serif';
+    mainCtx.textAlign = 'center';
+    mainCtx.fillText(`[PLACEHOLDER — Clip ${clipIndex+1} — assets/clip${clipIndex+1}-${mob?'mobile':'desktop'}.mp4]`, W/2, H - 20);
+  }
+  mainCtx.globalAlpha = 1;
+  mainCtx.restore();
+}
+
+// Overlay text logic
+const overlayMap = [
+  { id: 'overlay-1',        show: 0.08, hide: 0.38 },
+  { id: 'overlay-2',        show: 0.38, hide: 0.67 },
+  { id: 'overlay-3',        show: 0.67, hide: 0.84 },
+  { id: 'overlay-unveiled', show: 0.84, hide: 1.01 },
+];
+
+function updateTextOverlays(progress) {
+  overlayMap.forEach(({ id, show, hide }) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.toggle('visible', progress >= show && progress < hide);
+  });
+}
+
+let atto1Ticking = false;
+let lastAtto1Progress = -1;
+
+window.addEventListener('scroll', () => {
+  if (!atto1Ticking) {
+    requestAnimationFrame(() => {
+      const section = document.getElementById('atto1');
+      const rect = section.getBoundingClientRect();
+      const scrollable = section.offsetHeight - window.innerHeight;
+      const progress = Math.min(1, Math.max(0, -rect.top / scrollable));
+
+      if (Math.abs(progress - lastAtto1Progress) > 0.001) {
+        lastAtto1Progress = progress;
+        drawAtto1Placeholder(progress);
+        updateTextOverlays(progress);
+      }
+      atto1Ticking = false;
+    });
+    atto1Ticking = true;
+  }
+}, { passive: true });
+
+// Initial draw
+drawAtto1Placeholder(0);
+
+// ═══════════════════════════════════════════════════════════════════════════
+// SECTION 02 — GARANZIA REVEAL
+// ═══════════════════════════════════════════════════════════════════════════
+const garanziaObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) document.getElementById('garanzia').classList.add('revealed');
+  });
+}, { threshold: 0.15 });
+garanziaObs.observe(document.getElementById('garanzia'));
+
+// ═══════════════════════════════════════════════════════════════════════════
+// SECTION 03 — PORTFOLIO MODAL
+// ═══════════════════════════════════════════════════════════════════════════
+function openPortfolioModal(card) {
+  const modal = document.getElementById('portfolioModal');
+  document.getElementById('modalSector').textContent = card.dataset.sector;
+  document.getElementById('modalName').textContent = card.querySelector('.card-name').textContent;
+  document.getElementById('modalKpi').textContent = card.dataset.kpi;
+  document.getElementById('modalIframe').src = card.dataset.url;
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  lucide.createIcons();
+}
+
+function closePortfolioModal(event) {
+  if (event && event.target !== document.getElementById('portfolioModal') && !event.target.closest('.modal-close')) return;
+  const modal = document.getElementById('portfolioModal');
+  modal.classList.remove('open');
+  document.getElementById('modalIframe').src = '';
+  document.body.style.overflow = '';
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// SECTION 04 — ATTO II BUILD ANIMATION
+// ═══════════════════════════════════════════════════════════════════════════
+const phaseLabels = ['Inicializando...', 'Wireframing...', 'Colorindo blocos...', 'Site finalizado ✓'];
+let currentPhase = 0;
+
+function setPhase(phase) {
+  if (phase === currentPhase) return;
+  currentPhase = phase;
+  document.querySelectorAll('.build-phase').forEach((el, i) => el.classList.toggle('active', i === phase));
+  document.querySelectorAll('.process-step').forEach((el) => el.classList.toggle('active', parseInt(el.dataset.phase) === phase));
+  document.getElementById('phaseLabel').textContent = phaseLabels[phase];
+
+  // Animate wireframe drawing on phase 1
+  if (phase === 1) {
+    document.querySelectorAll('.wf-line').forEach((line, i) => {
+      const len = line.getTotalLength ? line.getTotalLength() : 200;
+      line.style.strokeDasharray = len;
+      line.style.strokeDashoffset = len;
+      line.style.transition = 'none';
+      setTimeout(() => {
+        line.style.transition = `stroke-dashoffset 0.6s ease ${i * 0.08}s`;
+        line.style.strokeDashoffset = 0;
+      }, 50);
+    });
+  }
+}
+
+const atto2Section = document.getElementById('atto2');
+const processStepEls = document.querySelectorAll('.process-step');
+
+const atto2Obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const phase = parseInt(e.target.dataset.phase);
+      setPhase(phase);
+    }
+  });
+}, { threshold: 0.6, rootMargin: '0px 0px -20% 0px' });
+
+processStepEls.forEach(el => atto2Obs.observe(el));
+
+// ═══════════════════════════════════════════════════════════════════════════
+// SECTION 05 — COUNT-UP ANIMATION
+// ═══════════════════════════════════════════════════════════════════════════
+function easeOutExpo(t) { return t === 1 ? 1 : 1 - Math.pow(2, -10 * t); }
+
+function countUp(el, target, prefix, suffix, duration) {
+  const start = performance.now();
+  function update(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = easeOutExpo(progress);
+    const current = eased * target;
+    const formatted = target % 1 === 0 ? Math.floor(current) : current.toFixed(1);
+    el.textContent = (prefix || '') + formatted + (suffix || '');
+    if (progress < 1) requestAnimationFrame(update);
+    else el.textContent = (prefix || '') + target + (suffix || '');
+  }
+  requestAnimationFrame(update);
+}
+
+const resultsObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.querySelectorAll('.result-number').forEach((el, i) => {
+      const target = parseFloat(el.dataset.target);
+      const prefix = el.dataset.prefix || '';
+      const suffix = el.dataset.suffix || '';
+      setTimeout(() => countUp(el, target, prefix, suffix, 2000), i * 200);
+    });
+    resultsObs.unobserve(e.target);
+  });
+}, { threshold: 0.3 });
+resultsObs.observe(document.getElementById('resultsStats'));
+
+// ═══════════════════════════════════════════════════════════════════════════
+// SECTION 06 — ATTO III WATCH CANVAS
+// ═══════════════════════════════════════════════════════════════════════════
+const USE_REAL_VIDEO_WATCH = false;
+const watchCanvas = document.getElementById('watchCanvas');
+const watchCtx = watchCanvas.getContext('2d');
+
+function resizeWatchCanvas() {
+  const dpr = window.devicePixelRatio || 1;
+  watchCanvas.width = window.innerWidth * dpr;
+  watchCanvas.height = window.innerHeight * dpr;
+  watchCanvas.style.width = window.innerWidth + 'px';
+  watchCanvas.style.height = window.innerHeight + 'px';
+  watchCtx.scale(dpr, dpr);
+}
+resizeWatchCanvas();
+window.addEventListener('resize', resizeWatchCanvas);
+
+// Watch component definitions (polar positions)
+const WATCH_PARTS = [
+  { angle: 0,    r: 0,    size: 60, type: 'circle', label: 'Movement', color: 'rgba(0,71,255,0.8)' },
+  { angle: 0,    r: 90,   size: 28, type: 'circle', label: 'Crown', color: 'rgba(180,180,200,0.7)' },
+  { angle: 30,   r: 110,  size: 20, type: 'rect',   label: 'Pusher', color: 'rgba(150,150,170,0.6)' },
+  { angle: 60,   r: 95,   size: 18, type: 'circle', label: 'Jewel', color: 'rgba(255,80,80,0.7)' },
+  { angle: 90,   r: 105,  size: 22, type: 'rect',   label: 'Lug', color: 'rgba(130,130,150,0.6)' },
+  { angle: 120,  r: 95,   size: 20, type: 'circle', label: 'Gear', color: 'rgba(100,200,150,0.6)' },
+  { angle: 150,  r: 110,  size: 16, type: 'rect',   label: 'Spring', color: 'rgba(200,150,50,0.6)' },
+  { angle: 180,  r: 88,   size: 24, type: 'circle', label: 'Rotor', color: 'rgba(0,71,255,0.5)' },
+  { angle: 210,  r: 108,  size: 18, type: 'rect',   label: 'Bridge', color: 'rgba(140,140,160,0.6)' },
+  { angle: 240,  r: 92,   size: 20, type: 'circle', label: 'Pinion', color: 'rgba(80,160,255,0.6)' },
+  { angle: 270,  r: 102,  size: 16, type: 'rect',   label: 'Plate', color: 'rgba(160,120,80,0.6)' },
+  { angle: 300,  r: 95,   size: 22, type: 'circle', label: 'Wheel', color: 'rgba(0,71,255,0.45)' },
+  { angle: 330,  r: 112,  size: 18, type: 'circle', label: 'Escapement', color: 'rgba(255,200,50,0.6)' },
+  // Inner ring
+  { angle: 15,   r: 50,   size: 12, type: 'circle', label: '', color: 'rgba(100,150,255,0.4)' },
+  { angle: 75,   r: 52,   size: 10, type: 'circle', label: '', color: 'rgba(100,150,255,0.35)' },
+  { angle: 135,  r: 48,   size: 12, type: 'circle', label: '', color: 'rgba(100,150,255,0.4)' },
+  { angle: 195,  r: 54,   size: 10, type: 'circle', label: '', color: 'rgba(100,150,255,0.35)' },
+  { angle: 255,  r: 50,   size: 12, type: 'circle', label: '', color: 'rgba(100,150,255,0.4)' },
+  { angle: 315,  r: 52,   size: 10, type: 'circle', label: '', color: 'rgba(100,150,255,0.35)' },
+];
+
+function drawWatchPlaceholder(progress) {
+  const W = window.innerWidth;
+  const H = window.innerHeight;
+  watchCtx.clearRect(0, 0, W, H);
+  watchCtx.fillStyle = '#0A0A0A';
+  watchCtx.fillRect(0, 0, W, H);
+
+  const cx = W / 2;
+  const cy = H / 2;
+  const baseR = Math.min(W, H) * 0.28;
+  const explode = progress * 1.8;
+
+  watchCtx.save();
+
+  // Draw connecting lines first (behind parts)
+  watchCtx.strokeStyle = 'rgba(0,71,255,0.12)';
+  watchCtx.lineWidth = 1;
+  WATCH_PARTS.forEach(part => {
+    if (part.r === 0) return;
+    const rad = (part.angle - 90) * Math.PI / 180;
+    const tx = cx + Math.cos(rad) * part.r * explode;
+    const ty = cy + Math.sin(rad) * part.r * explode;
+    watchCtx.beginPath();
+    watchCtx.moveTo(cx, cy);
+    watchCtx.lineTo(tx, ty);
+    watchCtx.stroke();
+  });
+
+  // Draw parts
+  WATCH_PARTS.forEach(part => {
+    const rad = (part.angle - 90) * Math.PI / 180;
+    const tx = cx + Math.cos(rad) * part.r * explode;
+    const ty = cy + Math.sin(rad) * part.r * explode;
+    const sz = part.size * (part.r === 0 ? 1 : 0.7 + 0.3 * Math.min(1, progress * 2));
+
+    watchCtx.save();
+    watchCtx.translate(tx, ty);
+    watchCtx.rotate(rad + progress * Math.PI);
+    watchCtx.fillStyle = part.color;
+    watchCtx.shadowBlur = part.r === 0 ? 20 : 8;
+    watchCtx.shadowColor = 'rgba(0,71,255,0.3)';
+
+    if (part.type === 'circle') {
+      watchCtx.beginPath();
+      watchCtx.arc(0, 0, sz * 0.5, 0, Math.PI * 2);
+      watchCtx.fill();
+      // Inner highlight
+      watchCtx.strokeStyle = 'rgba(255,255,255,0.2)';
+      watchCtx.lineWidth = 1;
+      watchCtx.stroke();
+    } else {
+      watchCtx.fillRect(-sz * 0.4, -sz * 0.2, sz * 0.8, sz * 0.4);
+      watchCtx.strokeStyle = 'rgba(255,255,255,0.15)';
+      watchCtx.lineWidth = 1;
+      watchCtx.strokeRect(-sz * 0.4, -sz * 0.2, sz * 0.8, sz * 0.4);
+    }
+    watchCtx.restore();
+  });
+
+  // Center watch ring
+  const ringAlpha = Math.max(0, 1 - progress * 1.5);
+  watchCtx.strokeStyle = `rgba(0,71,255,${ringAlpha * 0.4})`;
+  watchCtx.lineWidth = 1;
+  watchCtx.beginPath();
+  watchCtx.arc(cx, cy, baseR * (0.3 + progress * 0.7), 0, Math.PI * 2);
+  watchCtx.stroke();
+
+  // Placeholder label
+  watchCtx.globalAlpha = 0.18;
+  watchCtx.fillStyle = '#888';
+  watchCtx.font = '13px DM Sans, sans-serif';
+  watchCtx.textAlign = 'center';
+  watchCtx.fillText(`[PLACEHOLDER — assets/watch-${isMobile()?'mobile':'desktop'}.mp4]`, W/2, H - 20);
+  watchCtx.globalAlpha = 1;
+  watchCtx.restore();
+}
+
+// Watch text overlays
+const watchOverlayMap = [
+  { id: 'watch-overlay-1', show: 0.10, hide: 0.45 },
+  { id: 'watch-overlay-2', show: 0.45, hide: 0.80 },
+  { id: 'watch-overlay-3', show: 0.80, hide: 1.01 },
+];
+
+let watchTicking = false;
+let lastWatchProgress = -1;
+
+window.addEventListener('scroll', () => {
+  if (!watchTicking) {
+    requestAnimationFrame(() => {
+      const section = document.getElementById('atto3');
+      const rect = section.getBoundingClientRect();
+      const scrollable = section.offsetHeight - window.innerHeight;
+      const progress = Math.min(1, Math.max(0, -rect.top / scrollable));
+
+      if (Math.abs(progress - lastWatchProgress) > 0.001) {
+        lastWatchProgress = progress;
+        drawWatchPlaceholder(progress);
+        watchOverlayMap.forEach(({ id, show, hide }) => {
+          const el = document.getElementById(id);
+          if (el) el.classList.toggle('visible', progress >= show && progress < hide);
+        });
+      }
+      watchTicking = false;
+    });
+    watchTicking = true;
+  }
+}, { passive: true });
+
+drawWatchPlaceholder(0);
+
+// ═══════════════════════════════════════════════════════════════════════════
+// AI WIDGET
+// ═══════════════════════════════════════════════════════════════════════════
+function toggleAi() {
+  const panel = document.getElementById('aiPanel');
+  panel.classList.toggle('open');
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// CTA FORM
+// ═══════════════════════════════════════════════════════════════════════════
+document.getElementById('ctaBtn').addEventListener('click', () => {
+  const email = document.getElementById('ctaEmail').value;
+  if (!email || !email.includes('@')) {
+    document.getElementById('ctaEmail').style.borderColor = 'rgba(255,80,80,0.5)';
+    return;
+  }
+  document.getElementById('ctaEmail').style.borderColor = 'rgba(0,71,255,0.5)';
+  document.getElementById('ctaBtn').textContent = '✓ Enviado!';
+  setTimeout(() => {
+    const t = TRANSLATIONS[currentLang];
+    document.getElementById('ctaBtn').textContent = t['cta.btn'];
+  }, 3000);
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// INIT — Load Lucide icons, set language
+// ═══════════════════════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  lucide.createIcons();
+  const savedLang = localStorage.getItem('unveil-lang') || 'pt';
+  setLang(savedLang);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unveil Studio — Veja primeiro. Decida depois.</title>
+<meta name="description" content="Unveil Studio — Construímos seu site completamente. Você vê antes de pagar. Zero risco, zero adiantado.">
+<meta property="og:title" content="Unveil Studio — Veja primeiro. Decida depois.">
+<meta property="og:description" content="Construímos seu site completamente. Você vê antes de pagar.">
+<meta property="og:type" content="website">
+<link rel="alternate" hreflang="pt-BR" href="https://unveilstudio.com/">
+<link rel="alternate" hreflang="en" href="https://unveilstudio.com/">
+<link rel="alternate" hreflang="it" href="https://unveilstudio.com/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+/* ─── RESET ──────────────────────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg-dark:#0A0A0A;--surface:#1C1C1C;
+  --accent:#0047FF;--accent-rgb:0,71,255;
+  --yellow:#FFE000;--white:#FFF;--blue-tint:#F6F7FF;
+  --scale:min(1,100vw / 1920px);
+}
+html{scroll-behavior:auto}
+body{
+  background:var(--bg-dark);color:#fff;
+  font-family:'DM Sans',sans-serif;font-size:1rem;line-height:1.65;
+  overflow-x:hidden;overflow-y:scroll;
+}
+a{color:inherit;text-decoration:none}
+
+/* ─── LOADER ─────────────────────────────────────────────────────────────── */
+#loader{
+  position:fixed;inset:0;background:var(--bg-dark);
+  z-index:99999;display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:2rem;
+  transition:opacity .6s ease;
+}
+#loader.hide{opacity:0;pointer-events:none}
+.loader-logo{
+  font-family:'Syne',sans-serif;font-size:clamp(2rem,5vw,3.5rem);
+  font-weight:900;letter-spacing:-.05em;color:#fff;
+}
+.loader-text{
+  font-family:'DM Sans',sans-serif;font-size:.75rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:.14em;color:rgba(255,255,255,.4);
+}
+.loader-track{
+  width:220px;height:3px;background:rgba(255,255,255,.08);
+  border-radius:100px;overflow:hidden;
+}
+.loader-fill{
+  height:100%;width:0%;background:var(--accent);
+  transition:width .2s ease;border-radius:100px;
+}
+.loader-pct{
+  font-family:'DM Sans',sans-serif;font-size:.75rem;
+  color:rgba(255,255,255,.3);letter-spacing:.06em;
+}
+
+/* ─── SCROLL PROGRESS ───────────────────────────────────────────────────── */
+#scrollBar{
+  position:fixed;top:0;left:0;height:3px;width:0%;
+  background:var(--accent);z-index:10000;
+  transition:width .1s linear;
+}
+
+/* ─── NAVBAR ─────────────────────────────────────────────────────────────── */
+#navbar{
+  position:fixed;top:12px;left:0;right:0;z-index:1000;
+  display:flex;justify-content:center;pointer-events:none;
+}
+.nav-inner{
+  width:100%;max-width:100%;padding:14px 36px;
+  display:flex;justify-content:space-between;align-items:center;
+  transition:all .4s cubic-bezier(.16,1,.3,1);pointer-events:all;
+  background:rgba(20,20,20,.55);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+}
+#navbar.nav-scrolled .nav-inner{
+  max-width:860px;
+  background:rgba(30,30,30,.7);
+  border:1px solid rgba(255,255,255,.08);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-radius:100px;padding:10px 24px;
+}
+#navbar.nav-on-light .nav-inner{background:rgba(255,255,255,.88);border:1px solid rgba(0,0,0,.08);border-radius:100px;max-width:860px;padding:10px 24px}
+#navbar.nav-on-light .nav-logo,
+#navbar.nav-on-light .nav-links a{color:#0A0A0A}
+#navbar.nav-on-light .nav-links a:hover{color:#000}
+#navbar.nav-on-light .lang-btn{color:rgba(0,0,0,.45)}
+#navbar.nav-on-light .lang-btn.active{background:var(--accent);color:#fff}
+#navbar.nav-on-light .lang-sw{background:rgba(0,0,0,.05);border-color:rgba(0,0,0,.1)}
+.nav-logo{
+  font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;
+  letter-spacing:-.03em;color:#fff;cursor:default;
+  transition:letter-spacing .3s ease;
+}
+.nav-logo:hover{letter-spacing:.04em}
+.nav-links{display:flex;align-items:center;gap:2rem}
+.nav-links a{
+  font-family:'DM Sans',sans-serif;font-size:.9rem;
+  color:rgba(255,255,255,.65);transition:color .2s;
+}
+.nav-links a:hover{color:#fff}
+.lang-sw{
+  display:flex;gap:2px;background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08);border-radius:100px;padding:3px;
+}
+.lang-btn{
+  background:transparent;border:none;color:rgba(255,255,255,.4);
+  font-family:'DM Sans',sans-serif;font-size:.7rem;font-weight:700;
+  padding:4px 10px;border-radius:100px;cursor:pointer;
+  transition:all .2s;letter-spacing:.05em;
+}
+.lang-btn.active{background:var(--accent);color:#fff}
+.lang-btn:hover:not(.active){color:rgba(255,255,255,.8)}
+.nav-right{display:flex;align-items:center;gap:12px}
+.nav-cta{
+  background:var(--accent);color:#fff;
+  font-family:'DM Sans',sans-serif;font-weight:600;font-size:.88rem;
+  padding:10px 22px;border-radius:100px;
+  transition:transform .2s,box-shadow .2s;
+}
+.nav-cta:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(var(--accent-rgb),.4)}
+@media(max-width:768px){.nav-links,.lang-sw{display:none}}
+
+/* ─── DOT NAV ────────────────────────────────────────────────────────────── */
+.dot-nav{
+  position:fixed;right:28px;top:50%;transform:translateY(-50%);
+  z-index:900;display:flex;flex-direction:column;gap:10px;align-items:flex-end;
+}
+.dot-item{display:flex;align-items:center;gap:8px;cursor:pointer}
+.dot-item::after{
+  content:'';display:block;
+  width:8px;height:8px;border-radius:100px;
+  background:rgba(255,255,255,.25);
+  transition:all .3s ease;flex-shrink:0;
+}
+.dot-item.active::after{background:var(--accent);width:24px}
+.dot-label{
+  font-family:'DM Sans',sans-serif;font-size:.65rem;
+  color:rgba(255,255,255,.5);opacity:0;
+  transform:translateX(6px);transition:all .3s;white-space:nowrap;
+}
+.dot-item.active .dot-label,.dot-item:hover .dot-label{opacity:1;transform:translateX(0)}
+@media(max-width:768px){.dot-nav{display:none}}
+
+/* ─── SCROLL SECTIONS (Atto I & III) ─────────────────────────────────────── */
+.scroll-section{position:relative}
+#atto1{height:500vh;background:#0A0A0A;position:relative;isolation:isolate;z-index:1}
+#atto3{height:400vh;background:#FFFFFF;position:relative;isolation:isolate;z-index:1}
+.scroll-sticky{
+  position:sticky;top:0;height:100vh;width:100%;
+  background:transparent;
+}
+.scroll-canvas{
+  position:absolute;top:0;left:0;
+  width:100% !important;height:100% !important;
+  display:block;clip-path:inset(0);
+}
+.desktop-only{display:block}
+.mobile-only{display:none}
+@media(max-width:767px){.desktop-only{display:none}.mobile-only{display:block}}
+
+/* ─── TEXT OVERLAYS ──────────────────────────────────────────────────────── */
+.overlay-wrap{
+  position:absolute;inset:0;z-index:2;pointer-events:none;
+}
+.t-overlay{
+  position:absolute;
+  left:6%;right:auto;top:50%;
+  transform:translateY(calc(-50% + 20px));
+  max-width:38%;opacity:0;
+  text-align:left;
+  transition:opacity .6s ease,transform .6s ease;
+  pointer-events:none;
+}
+.t-overlay.visible{opacity:1;transform:translateY(-50%)}
+@media(max-width:767px){
+  .t-overlay{top:auto;bottom:8%;left:4%;right:4%;max-width:none;transform:translateY(20px);text-align:left}
+  .t-overlay.visible{transform:translateY(0)}
+}
+/* ── Watch section: dark text + larger sizes ── */
+.watch-overlay .ov-eye{color:var(--accent);font-size:.85rem;margin-bottom:1.25rem}
+.watch-overlay .ov-head{color:#0A0A0A;font-size:clamp(3rem,6vw,7rem)}
+.watch-overlay .ov-sub{color:rgba(0,0,0,.7);font-size:clamp(1.1rem,2vw,1.4rem);max-width:520px;line-height:1.7}
+.watch-overlay .unveiled-txt{color:#0A0A0A}
+@media(max-width:767px){
+  #atto3 .t-overlay .ov-head{color:#0A0A0A}
+  #atto3 .t-overlay .ov-sub{color:rgba(0,0,0,.55)}
+}
+/* ── Dot nav on white sections ── */
+.dot-nav.on-white .dot-item::after{background:rgba(0,0,0,.25)}
+.dot-nav.on-white .dot-item.active::after{background:#0A0A0A;box-shadow:0 0 0 2px rgba(0,0,0,.15)}
+.dot-nav.on-white .dot-label{color:rgba(0,0,0,.5)}
+.ov-eye{
+  display:block;font-family:'DM Sans',sans-serif;font-size:.7rem;
+  font-weight:600;text-transform:uppercase;letter-spacing:.14em;
+  color:var(--accent);margin-bottom:1rem;
+}
+.ov-head{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(2.2rem,5vw,5.5rem);
+  font-weight:900;color:#fff;line-height:.95;letter-spacing:-.04em;
+}
+.ov-sub{
+  margin-top:1rem;font-family:'DM Sans',sans-serif;
+  font-size:clamp(.9rem,1.5vw,1.1rem);
+  color:rgba(255,255,255,.5);line-height:1.6;
+}
+.unveiled-txt{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(4rem,12vw,14rem);
+  font-weight:900;color:#fff;letter-spacing:-.05em;line-height:.85;
+}
+
+/* ─── SECTION UTILITIES ──────────────────────────────────────────────────── */
+.s-eye{
+  display:block;font-family:'DM Sans',sans-serif;font-size:.7rem;
+  font-weight:600;text-transform:uppercase;letter-spacing:.12em;
+  color:var(--accent);margin-bottom:1rem;
+}
+.s-head{
+  font-family:'Syne',sans-serif;font-weight:900;
+  letter-spacing:-.04em;line-height:1;
+}
+.btn-prim{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--accent);color:#fff;
+  font-family:'DM Sans',sans-serif;font-weight:600;font-size:1rem;
+  padding:14px 32px;border-radius:100px;border:none;cursor:pointer;
+  transition:transform .3s,box-shadow .3s;text-decoration:none;
+}
+.btn-prim:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(var(--accent-rgb),.4)}
+
+/* ─── GARANTIA ───────────────────────────────────────────────────────────── */
+#garantia{
+  background:var(--yellow);padding:120px 32px;
+  text-align:center;position:relative;isolation:isolate;z-index:10;overflow:hidden;
+  transform:translateZ(0);
+  clip-path:none;
+}
+.gar-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(0,0,0,.08);color:#0A0A0A;
+  font-family:'DM Sans',sans-serif;font-weight:600;font-size:.75rem;
+  text-transform:uppercase;letter-spacing:.1em;
+  padding:8px 20px;border-radius:100px;margin-bottom:1.5rem;
+}
+.gar-head{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(3rem,8vw,7rem);
+  font-weight:900;color:#0A0A0A;letter-spacing:-.05em;
+  line-height:.9;margin:0 0 1.5rem;
+}
+.gar-sub{
+  font-family:'DM Sans',sans-serif;
+  font-size:clamp(1rem,2vw,1.3rem);
+  color:rgba(0,0,0,.65);max-width:560px;
+  margin:0 auto 3rem;line-height:1.6;
+}
+.gar-stats{
+  display:flex;justify-content:center;
+  gap:4rem;margin-bottom:3rem;flex-wrap:wrap;
+}
+.gar-stat-num{
+  display:block;font-family:'Syne',sans-serif;font-size:3rem;
+  font-weight:900;color:#0A0A0A;letter-spacing:-.04em;
+}
+.gar-stat-lbl{
+  display:block;font-family:'DM Sans',sans-serif;font-size:.82rem;
+  color:rgba(0,0,0,.55);margin-top:4px;max-width:140px;margin:4px auto 0;
+}
+.gar-cta{
+  display:inline-flex;align-items:center;gap:8px;
+  background:#0A0A0A;color:var(--yellow);
+  font-family:'DM Sans',sans-serif;font-weight:600;font-size:1rem;
+  padding:16px 36px;border-radius:100px;text-decoration:none;
+  transition:transform .3s,box-shadow .3s;
+}
+.gar-cta:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.2)}
+
+/* ─── PORTFOLIO ──────────────────────────────────────────────────────────── */
+#portfolio{background:#fff;padding:120px 32px;position:relative;isolation:isolate;z-index:10;transform:translateZ(0)}
+.port-hdr{text-align:center;margin-bottom:4rem}
+.port-hdr h2{
+  font-family:'Syne',sans-serif;font-size:clamp(2rem,5vw,4rem);
+  font-weight:900;color:#0A0A0A;letter-spacing:-.04em;line-height:1;
+  margin:.75rem 0 .5rem;
+}
+.port-hdr p{color:#888;font-family:'DM Sans',sans-serif;font-size:1rem}
+.port-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1.5rem;max-width:1200px;margin:0 auto;
+}
+@media(max-width:960px){.port-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.port-grid{grid-template-columns:1fr}}
+.port-card{
+  border-radius:16px;overflow:hidden;
+  background:#F6F7FF;border:1px solid #E0E4FF;
+  cursor:pointer;transition:transform .3s,box-shadow .3s;
+}
+.port-card:hover{transform:translateY(-6px);box-shadow:0 24px 60px rgba(0,71,255,.12)}
+.card-prev{position:relative;aspect-ratio:16/10;overflow:hidden}
+.card-grad{width:100%;height:100%}
+.card-ov{
+  position:absolute;inset:0;
+  background:rgba(0,71,255,.75);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;transition:opacity .3s;
+}
+.port-card:hover .card-ov{opacity:1}
+.card-ov span{color:#fff;font-family:'DM Sans',sans-serif;font-weight:600;font-size:1.1rem}
+.card-info{padding:1.25rem}
+.card-sec{
+  font-family:'DM Sans',sans-serif;font-size:.65rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:.1em;color:var(--accent);
+}
+.card-nm{
+  font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;
+  color:#0A0A0A;margin:4px 0;
+}
+.card-kpi{font-family:'DM Sans',sans-serif;font-size:.82rem;color:#555}
+.card-prev{background:var(--card-gradient,linear-gradient(135deg,#0A0A0A,#1a1a2e))}
+.card-prev[data-image]{background-image:var(--card-img);background-size:cover;background-position:center}
+.nda-link{display:block;font-family:'DM Sans',sans-serif;font-size:.75rem;color:#0047FF;text-decoration:none;margin-top:4px;font-weight:500}
+.nda-link:hover{text-decoration:underline}
+.port-card.nda{cursor:default}
+.port-card.nda:hover{transform:none;box-shadow:none}
+.port-card.nda .card-ov{display:none}
+.card-lock{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.45);
+}
+.card-lock svg{width:32px;height:32px;stroke:rgba(255,255,255,.5);fill:none;stroke-width:1.5}
+.nda-tooltip-wrap{position:relative}
+.nda-tip{
+  display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);
+  background:#111;color:rgba(255,255,255,.7);
+  font-family:'DM Sans',sans-serif;font-size:.72rem;
+  padding:6px 14px;border-radius:8px;white-space:nowrap;
+  border:1px solid rgba(255,255,255,.1);pointer-events:none;z-index:10;
+}
+.port-card.nda:hover .nda-tip{display:block}
+.port-nda-note{
+  font-family:'DM Sans',sans-serif;font-style:italic;font-size:.8rem;
+  color:rgba(0,0,0,.4);margin-top:4px;
+}
+
+/* MODAL */
+.modal-ov{
+  position:fixed;inset:0;background:rgba(0,0,0,.85);
+  z-index:5000;display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+  backdrop-filter:blur(8px);
+}
+.modal-ov.open{opacity:1;pointer-events:all}
+.modal-box{
+  background:#0A0A0A;border:1px solid rgba(255,255,255,.08);
+  border-radius:24px;padding:2rem;width:90vw;max-width:1000px;
+  max-height:90vh;overflow-y:auto;position:relative;
+}
+.modal-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.5rem}
+.modal-sec{
+  font-family:'DM Sans',sans-serif;font-size:.65rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:.1em;color:var(--accent);
+}
+.modal-nm{
+  font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:700;
+  color:#fff;margin-top:4px;
+}
+.modal-kpi{
+  background:rgba(0,71,255,.15);color:var(--accent);
+  font-family:'DM Sans',sans-serif;font-weight:600;font-size:.85rem;
+  padding:6px 16px;border-radius:100px;
+  border:1px solid rgba(0,71,255,.3);white-space:nowrap;
+}
+.modal-close{
+  position:absolute;top:1.5rem;right:1.5rem;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+  color:#fff;width:36px;height:36px;border-radius:50%;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:background .2s;
+}
+.modal-close:hover{background:rgba(255,255,255,.12)}
+.device-frame{
+  width:100%;aspect-ratio:16/9;background:#111;border-radius:12px;
+  overflow:hidden;border:1px solid rgba(255,255,255,.06);
+}
+.device-frame iframe{width:100%;height:100%;border:none}
+.modal-foot{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-top:1.5rem;flex-wrap:wrap;gap:1rem;
+}
+.modal-foot p{color:rgba(255,255,255,.5);font-family:'DM Sans',sans-serif}
+
+/* ─── ATTO II ────────────────────────────────────────────────────────────── */
+#atto2{background:var(--bg-dark);min-height:500vh;position:relative;isolation:isolate;z-index:1;padding:0}
+.atto2-sticky{position:sticky;top:0;height:100vh;display:flex;align-items:center;padding:0 32px;background:transparent;overflow:visible}
+.atto2-grid{
+  max-width:1200px;margin:0 auto;
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:5rem;align-items:start;
+}
+@media(max-width:768px){.atto2-grid{grid-template-columns:1fr;gap:3rem}}
+.atto2-right{position:sticky;top:120px}
+.a2-ehead{
+  font-family:'Syne',sans-serif;font-size:clamp(2rem,4vw,4.5rem);
+  font-weight:900;color:#fff;letter-spacing:-.04em;
+  line-height:1;margin:1rem 0 0;
+}
+.atto2-tagline{
+  font-family:'DM Sans',sans-serif;font-size:clamp(.95rem,1.5vw,1.15rem);
+  color:rgba(255,255,255,.45);line-height:1.5;
+  margin-top:.75rem;margin-bottom:2rem;max-width:480px;
+}
+.proc-steps{display:flex;flex-direction:column;gap:1rem}
+.proc-step{
+  display:flex;align-items:center;gap:1.25rem;
+  padding:1rem 1.25rem;border-radius:12px;
+  border:1px solid rgba(255,255,255,.06);
+  background:rgba(255,255,255,.02);
+  transition:all .4s ease;cursor:default;
+}
+.proc-step.active{
+  border-color:rgba(var(--accent-rgb),.4);
+  background:rgba(var(--accent-rgb),.06);
+  border-left:3px solid var(--accent);
+}
+.step-n{
+  font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:900;
+  color:rgba(255,255,255,.15);transition:color .4s;min-width:2.5rem;
+}
+.proc-step.active .step-n{color:var(--accent)}
+.step-ti{
+  display:block;font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;
+  color:rgba(255,255,255,.5);transition:color .4s;
+}
+.proc-step.active .step-ti{color:#fff}
+.step-tm{
+  display:block;font-family:'DM Sans',sans-serif;font-size:.78rem;
+  color:rgba(255,255,255,.3);margin-top:2px;
+}
+.ai-screen{
+  background:#0D0D0D;border:1px solid rgba(0,71,255,.2);
+  border-radius:16px;overflow:hidden;width:100%;
+}
+.ai-screen-header{
+  background:#161616;padding:12px 16px;
+  display:flex;align-items:center;gap:10px;
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.ai-screen-dots{display:flex;gap:5px}
+.ai-screen-dots span{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.15)}
+.ai-screen-dots span:first-child{background:#ff5f57}
+.ai-screen-dots span:nth-child(2){background:#febc2e}
+.ai-screen-dots span:nth-child(3){background:#28c840}
+.ai-screen-title{font-size:.72rem;color:rgba(255,255,255,.35);letter-spacing:.03em;font-family:'DM Sans',sans-serif}
+.ai-screen-body{padding:20px;display:flex;flex-direction:column;gap:10px}
+.ai-line{display:flex;align-items:center;gap:10px;font-size:.78rem;line-height:1.4;transition:all .4s ease;font-family:'DM Sans',monospace}
+.ai-line--done .ai-check{color:#22c55e;font-size:.8rem;width:16px;flex-shrink:0}
+.ai-line--done .ai-line-text{color:rgba(255,255,255,.5)}
+.ai-line--active .ai-spinner{
+  width:14px;height:14px;border:1.5px solid rgba(0,71,255,.3);
+  border-top-color:#0047FF;border-radius:50%;
+  animation:spin .8s linear infinite;flex-shrink:0;
+}
+.ai-line--active .ai-line-text{color:#fff;font-weight:500}
+.ai-line--pending .ai-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.15);margin-left:4px;flex-shrink:0}
+.ai-line--pending .ai-line-text{color:rgba(255,255,255,.2)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ai-progress-area{
+  display:flex;align-items:center;gap:12px;
+  margin-top:6px;padding-top:12px;
+  border-top:1px solid rgba(255,255,255,.05);
+}
+.ai-progress-bar{flex:1;height:3px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden}
+.ai-progress-fill{height:100%;background:#0047FF;border-radius:2px;transition:width .6s ease}
+.ai-progress-label{font-size:.7rem;color:#0047FF;min-width:32px;text-align:right;font-family:'DM Sans',sans-serif}
+.ai-preview-area{
+  margin-top:8px;border-radius:10px;overflow:hidden;
+  border:1px solid rgba(0,71,255,.15);
+  opacity:0;transform:translateY(8px);
+  transition:opacity .5s ease,transform .5s ease;
+}
+.ai-preview-area.visible{opacity:1;transform:translateY(0)}
+.ai-preview-mock{background:#fff;padding:10px;display:flex;flex-direction:column;gap:8px}
+.ai-mock-nav{height:20px;background:#0047FF;border-radius:4px;opacity:.9}
+.ai-mock-hero{padding:10px 0;display:flex;flex-direction:column;gap:5px}
+.ai-mock-h1{height:12px;background:#0A0A0A;border-radius:3px;width:70%}
+.ai-mock-h2{height:8px;background:#0A0A0A;border-radius:3px;width:45%;opacity:.4}
+.ai-mock-btn{height:18px;background:#0047FF;border-radius:9px;width:100px;margin-top:4px}
+.ai-mock-cards{display:flex;gap:6px}
+.ai-mock-card{flex:1;height:40px;background:#F6F7FF;border-radius:5px;border:1px solid #E0E4FF}
+
+/* ─── RESULTS ────────────────────────────────────────────────────────────── */
+#results{background:var(--blue-tint);padding:120px 32px;text-align:center;position:relative;isolation:isolate;z-index:10;transform:translateZ(0)}
+#results h2{
+  font-family:'Syne',sans-serif;color:#0A0A0A;
+  font-size:clamp(2rem,5vw,4rem);font-weight:900;
+  letter-spacing:-.04em;line-height:1;margin:1rem 0 4rem;
+}
+.res-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:2rem;max-width:1000px;margin:0 auto;
+}
+@media(max-width:768px){.res-grid{grid-template-columns:repeat(2,1fr)}}
+.res-num{
+  display:block;font-family:'Syne',sans-serif;
+  font-size:clamp(2rem,5vw,4rem);font-weight:900;
+  color:var(--accent);letter-spacing:-.04em;
+}
+.res-lbl{display:block;font-family:'DM Sans',sans-serif;font-size:.82rem;color:#666;margin-top:6px}
+
+/* ─── CTA ────────────────────────────────────────────────────────────────── */
+#cta{
+  background:var(--bg-dark);padding:160px 32px;
+  text-align:center;position:relative;isolation:isolate;z-index:1;overflow:hidden;
+}
+#cta::before{
+  content:'';position:absolute;width:600px;height:600px;
+  background:var(--accent);border-radius:50%;filter:blur(200px);
+  opacity:.08;top:50%;left:50%;transform:translate(-50%,-50%);
+  pointer-events:none;
+}
+.cta-eye{
+  display:block;font-family:'DM Sans',sans-serif;font-size:.7rem;
+  font-weight:600;text-transform:uppercase;letter-spacing:.12em;
+  color:rgba(255,255,255,.4);margin-bottom:1rem;position:relative;
+}
+.cta-head{
+  font-family:'Syne',sans-serif;font-size:clamp(3rem,9vw,9rem);
+  font-weight:900;color:#fff;letter-spacing:-.05em;
+  line-height:.9;margin:1.5rem 0 1rem;position:relative;
+}
+.cta-sub{
+  color:rgba(255,255,255,.4);font-family:'DM Sans',sans-serif;
+  font-size:clamp(1.15rem,2vw,1.4rem);line-height:1.65;max-width:480px;margin:0 auto 3rem;position:relative;
+}
+.cta-form{
+  display:flex;gap:12px;max-width:480px;margin:0 auto 1rem;
+  justify-content:center;flex-wrap:wrap;position:relative;
+}
+.cta-input{
+  flex:1;min-width:220px;padding:18px 28px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
+  border-radius:100px;color:#fff;font-family:'DM Sans',sans-serif;
+  font-size:1.05rem;outline:none;transition:border-color .2s;
+}
+.cta-input:focus{border-color:rgba(var(--accent-rgb),.5)}
+.cta-btn{
+  padding:18px 36px;background:var(--accent);color:#fff;border:none;
+  border-radius:100px;font-family:'DM Sans',sans-serif;
+  font-weight:600;font-size:1.05rem;cursor:pointer;
+  transition:transform .3s,box-shadow .3s;
+  animation:pulsebtn 2.5s ease-in-out infinite;
+  position:relative;
+}
+.cta-btn:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(var(--accent-rgb),.4)}
+@keyframes pulsebtn{
+  0%,100%{box-shadow:0 0 0 0 rgba(var(--accent-rgb),.4)}
+  50%{box-shadow:0 0 0 12px rgba(var(--accent-rgb),0)}
+}
+.cta-disc{
+  font-family:'DM Sans',sans-serif;font-size:.95rem;
+  color:rgba(255,255,255,.25);position:relative;
+}
+
+/* ─── FOOTER ─────────────────────────────────────────────────────────────── */
+footer{
+  background:var(--bg-dark);border-top:1px solid rgba(255,255,255,.06);
+  padding:80px 32px 48px;position:relative;isolation:isolate;z-index:1;
+}
+.ft-inner{max-width:1200px;margin:0 auto}
+.ft-top{
+  display:flex;justify-content:space-between;align-items:flex-start;
+  margin-bottom:3rem;flex-wrap:wrap;gap:2rem;
+}
+.ft-logo{
+  font-family:'Syne',sans-serif;font-weight:700;font-size:1.3rem;
+  letter-spacing:-.03em;color:#fff;display:block;margin-bottom:.75rem;
+}
+.ft-brand p{
+  font-family:'DM Sans',sans-serif;font-size:.9rem;
+  color:rgba(255,255,255,.4);line-height:1.6;
+}
+.ft-links{display:flex;gap:4rem;flex-wrap:wrap}
+.ft-col{display:flex;flex-direction:column;gap:.75rem}
+.ft-col-ttl{
+  font-family:'DM Sans',sans-serif;font-size:.7rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.3);
+  margin-bottom:.25rem;
+}
+.ft-col a{
+  font-family:'DM Sans',sans-serif;font-size:.9rem;
+  color:rgba(255,255,255,.5);transition:color .2s;
+}
+.ft-col a:hover{color:#fff}
+.ft-bot{
+  display:flex;justify-content:space-between;align-items:center;
+  padding-top:2rem;border-top:1px solid rgba(255,255,255,.06);
+  flex-wrap:wrap;gap:1rem;
+}
+.ft-bot p{font-family:'DM Sans',sans-serif;font-size:.8rem;color:rgba(255,255,255,.25)}
+.ft-soc{display:flex;gap:1rem;align-items:center}
+.ft-soc a{color:rgba(255,255,255,.35);transition:color .2s;display:flex}
+.ft-soc a:hover{color:#fff}
+
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-logo">UNVEILED.</div>
+  <p class="loader-text" data-i18n="loader.text">Carregando</p>
+  <div class="loader-track"><div class="loader-fill" id="loaderFill"></div></div>
+  <div class="loader-pct" id="loaderPct">0%</div>
+</div>
+
+<!-- SCROLL PROGRESS -->
+<div id="scrollBar"></div>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <div class="nav-logo">UNVEIL.</div>
+    <div class="nav-links">
+      <a href="#portfolio" data-i18n="nav.portfolio">Portfólio</a>
+      <a href="#atto2" data-i18n="nav.process">Como funciona</a>
+      <a href="#cta" data-i18n="nav.contact">Contato</a>
+    </div>
+    <div class="nav-right">
+      <div class="lang-sw">
+        <button class="lang-btn active" data-lang="pt">PT</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="it">IT</button>
+      </div>
+      <a href="#cta" class="nav-cta" data-i18n="nav.cta">Fale conosco →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- DOT NAV -->
+<div class="dot-nav" id="dotNav">
+  <div class="dot-item active" data-section="atto1"><span class="dot-label">Intro</span></div>
+  <div class="dot-item" data-section="garantia"><span class="dot-label">Garantia</span></div>
+  <div class="dot-item" data-section="portfolio"><span class="dot-label">Portfólio</span></div>
+  <div class="dot-item" data-section="atto2"><span class="dot-label">Processo</span></div>
+  <div class="dot-item" data-section="results"><span class="dot-label">Resultados</span></div>
+  <div class="dot-item" data-section="atto3"><span class="dot-label">Precisão</span></div>
+  <div class="dot-item" data-section="cta"><span class="dot-label">Começar</span></div>
+</div>
+
+<!-- ══ SECTION 01 — ATTO I ═══════════════════════════════════════════════════ -->
+<section id="atto1" class="scroll-section">
+  <div class="scroll-sticky">
+    <canvas id="desktopCanvas" class="scroll-canvas desktop-only"></canvas>
+    <canvas id="mobileCanvas" class="scroll-canvas mobile-only"></canvas>
+    <div class="overlay-wrap">
+      <div class="t-overlay" id="ov1">
+        <span class="ov-eye" data-i18n="a1.eye1">CAPÍTULO 01</span>
+        <h2 class="ov-head" data-i18n="a1.h1">Isto é o que os seus<br>clientes veem agora.</h2>
+      </div>
+      <div class="t-overlay" id="ov2">
+        <span class="ov-eye" data-i18n="a1.eye2">O PROBLEMA</span>
+        <h2 class="ov-head" data-i18n="a1.h2">Invisível.<br>Esquecível.<br>Perdendo leads.</h2>
+        <p class="ov-sub" data-i18n="a1.sub2">Um site que não converte não é só uma oportunidade perdida. É o melhor vendedor do seu concorrente.</p>
+      </div>
+      <div class="t-overlay" id="ov3">
+        <h2 class="ov-head" data-i18n="a1.h3">Existe um<br>jeito melhor.</h2>
+      </div>
+      <div class="t-overlay" id="ovU">
+        <h1 class="unveiled-txt" data-i18n="a1.unveiled">UNVEILED.</h1>
+        <p class="ov-sub" style="margin-top:1.5rem" data-i18n="a1.unveiled.sub">Você vê primeiro. Decide depois.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SECTION 02 — GARANTIA ══════════════════════════════════════════════════ -->
+<section id="garantia">
+  <div class="gar-badge">
+    <i data-lucide="shield-check" style="width:18px;height:18px;stroke-width:1.5;fill:none"></i>
+    <span data-i18n="gar.badge">Garantia Unveil</span>
+  </div>
+  <h2 class="gar-head" data-i18n="gar.head">Veja o seu site.<br>Decida depois.</h2>
+  <p class="gar-sub" data-i18n="gar.sub">Zero adiantado. Zero risco. Construímos tudo — você aprova antes de pagar um único centavo.</p>
+  <div class="gar-stats">
+    <div class="gar-stat">
+      <span class="gar-stat-num" id="gs1" data-target="70" data-prefix="+" data-suffix="">+70</span>
+      <span class="gar-stat-lbl" data-i18n="gar.s1l">Sites construídos e entregues</span>
+    </div>
+    <div class="gar-stat">
+      <span class="gar-stat-num" id="gs2" data-target="100" data-prefix="" data-suffix="%">100%</span>
+      <span class="gar-stat-lbl" data-i18n="gar.s2l">Aprovação antes da fatura</span>
+    </div>
+    <div class="gar-stat">
+      <span class="gar-stat-num" data-i18n="gar.s3n">4 semanas</span>
+      <span class="gar-stat-lbl" data-i18n="gar.s3l">Do briefing ao site pronto</span>
+    </div>
+  </div>
+  <a href="#portfolio" class="gar-cta" data-i18n="gar.cta">Ver o que construímos →</a>
+</section>
+
+<!-- ══ SECTION 03 — PORTFOLIO ═════════════════════════════════════════════════ -->
+<section id="portfolio">
+  <div class="port-hdr">
+    <span class="s-eye" data-i18n="port.eye">PORTFÓLIO</span>
+    <h2 data-i18n="port.head">Empresas que transformamos.</h2>
+    <p data-i18n="port.sub">Clique em qualquer card para ver o site ao vivo.</p>
+    <p class="port-nda-note" data-i18n="port.nda">Por razões de NDA, não podemos citar todos os nossos parceiros.</p>
+  </div>
+  <div class="port-grid">
+    <div class="port-card" data-url="https://sevenexpansion.com.br" data-kpi="port.kpi.seven" data-sector="EXPANSÃO" data-image="assets/portfolio-seven.jpg" onclick="openModal(this)">
+      <div class="card-prev" style="--card-gradient:linear-gradient(135deg,#0A0A0A,#1a1a2e)"><div class="card-ov"><span data-i18n="port.view">Ver site →</span></div></div>
+      <div class="card-info"><span class="card-sec">EXPANSÃO</span><h3 class="card-nm">Seven Expansion</h3><span class="card-kpi" data-i18n="port.kpi.seven">Empresa líder no Brasil em expansão de franquias</span></div>
+    </div>
+    <div class="port-card" data-url="https://sorellebrasil.com" data-kpi="port.kpi.sorelle" data-sector="BELEZA & BEM-ESTAR" data-image="assets/portfolio-sorelle.jpg" onclick="openModal(this)">
+      <div class="card-prev" style="--card-gradient:linear-gradient(135deg,#f8b4c8,#e91e8c)"><div class="card-ov"><span data-i18n="port.view">Ver site →</span></div></div>
+      <div class="card-info"><span class="card-sec">BELEZA &amp; BEM-ESTAR</span><h3 class="card-nm">Sorelle Brasil</h3><span class="card-kpi" data-i18n="port.kpi.sorelle">Primeiro produtor de aloe vera do Brasil</span></div>
+    </div>
+    <div class="port-card" data-url="https://creatorlabagency.com" data-kpi="port.kpi.creator" data-sector="MARKETING & CRIAÇÃO" data-image="assets/portfolio-creatorlab.jpg" onclick="openModal(this)">
+      <div class="card-prev" style="--card-gradient:linear-gradient(135deg,#0047FF,#00C6FF)"><div class="card-ov"><span data-i18n="port.view">Ver site →</span></div></div>
+      <div class="card-info"><span class="card-sec">MARKETING &amp; CRIAÇÃO</span><h3 class="card-nm">Creator Lab Agency</h3><span class="card-kpi" data-i18n="port.kpi.creator">Primeira agência de marketing no Brasil com ecossistema completo</span></div>
+    </div>
+    <div class="port-card" data-url="https://petlablatam.com" data-kpi="port.kpi.petlab" data-sector="PET & SAÚDE ANIMAL" data-image="assets/portfolio-petlab.jpg" onclick="openModal(this)">
+      <div class="card-prev" style="--card-gradient:linear-gradient(135deg,#11998e,#38ef7d)"><div class="card-ov"><span data-i18n="port.view">Ver site →</span></div></div>
+      <div class="card-info"><span class="card-sec">PET &amp; SAÚDE ANIMAL</span><h3 class="card-nm">Petlab LatAm</h3><span class="card-kpi" data-i18n="port.kpi.petlab">Primeira empresa na América Latina conectando produtores e marcas do setor pet</span></div>
+    </div>
+    <div class="port-card nda" data-url="#" data-kpi="Parceiro NDA" data-sector="FINANCEIRO">
+      <div class="card-prev" style="--card-gradient:linear-gradient(135deg,#1C1C1C,#2A2A2A)">
+        <div class="card-lock"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+        <div class="nda-tip">Projeto confidencial — NDA ativo</div>
+      </div>
+      <div class="card-info nda-tooltip-wrap"><span class="card-sec">FINANCEIRO</span><h3 class="card-nm" style="color:#888">Parceiro Confidencial</h3><span class="card-kpi">NDA ativo</span><a href="#cta" class="nda-link" data-i18n="port.nda.link">Solicite informações para ver mais exemplos →</a></div>
+    </div>
+    <div class="port-card nda" data-url="#" data-kpi="Parceiro NDA" data-sector="INDÚSTRIA">
+      <div class="card-prev" style="--card-gradient:linear-gradient(135deg,#0D0D0D,#1a1a3e)">
+        <div class="card-lock"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+        <div class="nda-tip">Projeto confidencial — NDA ativo</div>
+      </div>
+      <div class="card-info nda-tooltip-wrap"><span class="card-sec">INDÚSTRIA</span><h3 class="card-nm" style="color:#888">Parceiro Confidencial</h3><span class="card-kpi">NDA ativo</span><a href="#cta" class="nda-link" data-i18n="port.nda.link">Solicite informações para ver mais exemplos →</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- MODAL -->
+<div id="portModal" class="modal-ov" onclick="closeModal(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()"><i data-lucide="x" style="width:16px;height:16px;stroke-width:2;fill:none"></i></button>
+    <div class="modal-hdr">
+      <div><span class="modal-sec" id="mSec"></span><h3 class="modal-nm" id="mNm"></h3></div>
+      <span class="modal-kpi" id="mKpi"></span>
+    </div>
+    <div class="device-frame"><iframe id="mFrame" src="" title="Preview"></iframe></div>
+    <div class="modal-foot">
+      <p data-i18n="modal.txt">Quer um site assim?</p>
+      <a href="#cta" class="btn-prim" onclick="closeModal()" data-i18n="modal.btn">Iniciar seu projeto →</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SECTION 04 — ATTO II ═══════════════════════════════════════════════════ -->
+<section id="atto2">
+  <div class="atto2-sticky">
+  <div class="atto2-grid">
+    <div class="atto2-left">
+      <span class="s-eye" data-i18n="a2.eye">CAPÍTULO 02</span>
+      <h2 class="a2-ehead" data-i18n="a2.head">Quatro semanas.<br>Um site que dura anos.</h2>
+      <p class="atto2-tagline" data-i18n="atto2.tagline">Um time de desenvolvedores sem precedentes ao seu serviço.</p>
+      <div class="proc-steps">
+        <div class="proc-step active" data-phase="0">
+          <span class="step-n">01</span>
+          <div><span class="step-ti" data-i18n="a2.s1">Briefing &amp; Estratégia</span><span class="step-tm" data-i18n="a2.s1t">3 dias</span></div>
+        </div>
+        <div class="proc-step" data-phase="1">
+          <span class="step-n">02</span>
+          <div><span class="step-ti" data-i18n="a2.s2">Design</span><span class="step-tm" data-i18n="a2.s2t">1 semana</span></div>
+        </div>
+        <div class="proc-step" data-phase="2">
+          <span class="step-n">03</span>
+          <div><span class="step-ti" data-i18n="a2.s3">Desenvolvimento</span><span class="step-tm" data-i18n="a2.s3t">2 semanas</span></div>
+        </div>
+        <div class="proc-step" data-phase="3">
+          <span class="step-n">04</span>
+          <div><span class="step-ti" data-i18n="a2.s4">Deploy &amp; Entrega</span><span class="step-tm" data-i18n="a2.s4t">1 dia</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="atto2-right">
+      <div class="ai-screen" id="aiScreen">
+        <div class="ai-screen-header">
+          <div class="ai-screen-dots"><span></span><span></span><span></span></div>
+          <span class="ai-screen-title">Unveil AI — building your site</span>
+        </div>
+        <div class="ai-screen-body" id="aiScreenBody">
+          <div class="ai-line ai-line--done" id="aiLine0">
+            <span class="ai-check">✓</span>
+            <span class="ai-line-text" data-i18n="ai.line0">Analisando briefing do cliente...</span>
+          </div>
+          <div class="ai-line ai-line--done" id="aiLine1">
+            <span class="ai-check">✓</span>
+            <span class="ai-line-text" data-i18n="ai.line1">Gerando arquitetura do site...</span>
+          </div>
+          <div class="ai-line ai-line--done" id="aiLine2">
+            <span class="ai-check">✓</span>
+            <span class="ai-line-text" data-i18n="ai.line2">Aplicando design system personalizado...</span>
+          </div>
+          <div class="ai-line ai-line--active" id="aiLine3">
+            <span class="ai-spinner"></span>
+            <span class="ai-line-text" data-i18n="ai.line3">Construindo componentes interativos...</span>
+          </div>
+          <div class="ai-line ai-line--pending" id="aiLine4">
+            <span class="ai-dot"></span>
+            <span class="ai-line-text" data-i18n="ai.line4">Otimizando para mobile...</span>
+          </div>
+          <div class="ai-line ai-line--pending" id="aiLine5">
+            <span class="ai-dot"></span>
+            <span class="ai-line-text" data-i18n="ai.line5">Deploy e testes finais...</span>
+          </div>
+          <div class="ai-progress-area">
+            <div class="ai-progress-bar"><div class="ai-progress-fill" id="aiProgressFill" style="width:18%"></div></div>
+            <span class="ai-progress-label" id="aiProgressLabel">18%</span>
+          </div>
+          <div class="ai-preview-area" id="aiPreviewArea">
+            <div class="ai-preview-mock">
+              <div class="ai-mock-nav"></div>
+              <div class="ai-mock-hero">
+                <div class="ai-mock-h1"></div>
+                <div class="ai-mock-h2"></div>
+                <div class="ai-mock-btn"></div>
+              </div>
+              <div class="ai-mock-cards">
+                <div class="ai-mock-card"></div>
+                <div class="ai-mock-card"></div>
+                <div class="ai-mock-card"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div><!-- end atto2-sticky -->
+</section>
+
+<!-- ══ SECTION 05 — RESULTS ═══════════════════════════════════════════════════ -->
+<section id="results">
+  <div style="max-width:1200px;margin:0 auto">
+    <span class="s-eye" data-i18n="res.eye">RESULTADOS</span>
+    <h2 data-i18n="res.head">Números que falam<br>por si mesmos.</h2>
+    <div class="res-grid" id="resGrid">
+      <div><span class="res-num" data-target="247" data-prefix="+" data-suffix="%">+247%</span><span class="res-lbl" data-i18n="res.l1">Aumento médio de tráfego</span></div>
+      <div><span class="res-num" data-target="3.2" data-prefix="" data-suffix="x">3.2x</span><span class="res-lbl" data-i18n="res.l2">Taxa de conversão média</span></div>
+      <div><span class="res-num" data-target="72" data-prefix="" data-suffix="h">72h</span><span class="res-lbl" data-i18n="res.l3">Do briefing ao primeiro wireframe</span></div>
+      <div><span class="res-num" data-target="70" data-prefix="+" data-suffix="">+70</span><span class="res-lbl" data-i18n="res.l4">Sites construídos e entregues</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SECTION 06 — ATTO III ══════════════════════════════════════════════════ -->
+<section id="atto3" class="scroll-section">
+  <div class="scroll-sticky">
+    <canvas id="watchDesktop" class="scroll-canvas desktop-only"></canvas>
+    <canvas id="watchMobile" class="scroll-canvas mobile-only"></canvas>
+    <div class="overlay-wrap">
+      <div class="t-overlay watch-overlay" id="wo1">
+        <span class="ov-eye" data-i18n="a3.eye1">CAPÍTULO 03</span>
+        <h2 class="ov-head" data-i18n="a3.h1">Este é o nível de<br>detalhe que aplicamos.</h2>
+      </div>
+      <div class="t-overlay watch-overlay" id="wo2">
+        <span class="ov-eye" data-i18n="a3.eye2">PRECISÃO</span>
+        <h2 class="ov-head" data-i18n="a3.h2">Dezenas de componentes.<br>Cada um no seu lugar.</h2>
+        <p class="ov-sub" data-i18n="a3.sub2">Cada linha de código. Cada pixel. Cada interação. Engenheirado com a mesma precisão de um Grande Complication.</p>
+      </div>
+      <div class="t-overlay watch-overlay" id="wo3">
+        <h2 class="ov-head" data-i18n="a3.h3" style="font-size:clamp(2rem,4vw,5rem)">O seu site merece<br>esta precisão.</h2>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SECTION 07 — CTA ═══════════════════════════════════════════════════════ -->
+<section id="cta">
+  <span class="cta-eye" data-i18n="cta.eye">COMECE AGORA</span>
+  <h2 class="cta-head" data-i18n="cta.head">O seu site já está<br>sendo <span style="color:var(--accent)">construído.</span></h2>
+  <p class="cta-sub" data-i18n="cta.sub">Veja antes de pagar. Zero risco, zero compromisso, zero adiantado.</p>
+  <div class="cta-form">
+    <input type="email" id="ctaEmail" class="cta-input" data-i18n-ph="cta.ph" placeholder="seu@empresa.com">
+    <button class="cta-btn" id="ctaBtn" data-i18n="cta.btn">Ver meu site primeiro →</button>
+  </div>
+  <p class="cta-disc" data-i18n="cta.disc">Sem cartão de crédito. Sem contrato. Só o seu novo site.</p>
+</section>
+
+<!-- ══ FOOTER ══════════════════════════════════════════════════════════════════ -->
+<footer>
+  <div class="ft-inner">
+    <div class="ft-top">
+      <div class="ft-brand">
+        <span class="ft-logo">UNVEIL.</span>
+        <p data-i18n="ft.tag">Construímos sites que convertem.<br>Você vê antes de pagar.</p>
+      </div>
+      <div class="ft-links">
+        <div class="ft-col">
+          <span class="ft-col-ttl" data-i18n="ft.co">Empresa</span>
+          <a href="#portfolio" data-i18n="nav.portfolio">Portfólio</a>
+          <a href="#atto2" data-i18n="nav.process">Como funciona</a>
+          <a href="#results" data-i18n="res.eye">Resultados</a>
+        </div>
+        <div class="ft-col">
+          <span class="ft-col-ttl" data-i18n="ft.leg">Legal</span>
+          <a href="#" data-i18n="ft.priv">Política de Privacidade</a>
+          <a href="#" data-i18n="ft.terms">Termos de Serviço</a>
+        </div>
+      </div>
+    </div>
+    <div class="ft-bot">
+      <p data-i18n="ft.copy">© 2026 Unveil Studio. Todos os direitos reservados.</p>
+      <div class="ft-soc">
+        <a href="#" aria-label="LinkedIn"><i data-lucide="linkedin" style="width:20px;height:20px;stroke-width:1.5;fill:none"></i></a>
+        <a href="#" aria-label="Instagram"><i data-lucide="instagram" style="width:20px;height:20px;stroke-width:1.5;fill:none"></i></a>
+        <a href="#" aria-label="Twitter"><i data-lucide="twitter" style="width:20px;height:20px;stroke-width:1.5;fill:none"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- AI WIDGET -->
+<div id="aiWidget">
+  <div class="ai-panel" id="aiPanel">
+    <p class="ai-panel-title" data-i18n="ai.panel.title">Como podemos ajudar?</p>
+    <p class="ai-panel-sub" data-i18n="ai.panel.sub">Tire suas dúvidas sobre o processo ou inicie seu projeto agora.</p>
+  </div>
+  <button class="ai-btn" id="aiBtn" onclick="toggleAI()">
+    <i data-lucide="message-circle" style="width:20px;height:20px;stroke-width:1.5;fill:none"></i>
+    <span data-i18n="ai.btn">Falar com IA</span>
+  </button>
+</div>
+<!-- ELEVENLABS_WIDGET -->
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════════
+   TRANSLATIONS
+═══════════════════════════════════════════════════════════════════════════ */
+const T = {
+pt:{
+  'loader.text':'Carregando',
+  'nav.portfolio':'Portfólio','nav.process':'Como funciona','nav.contact':'Contato','nav.cta':'Fale conosco →',
+  'a1.eye1':'CAPÍTULO 01','a1.h1':'Isto é o que os seus<br>clientes veem agora.',
+  'a1.eye2':'O PROBLEMA',
+  'a1.h2':'Invisível.<br>Esquecível.<br>Perdendo leads.',
+  'a1.sub2':'Um site que não converte não é só uma oportunidade perdida. É o melhor vendedor do seu concorrente.',
+  'a1.h3':'Existe um<br>jeito melhor.','a1.unveiled':'UNVEILED.','a1.unveiled.sub':'Você vê primeiro. Decide depois.',
+  'gar.badge':'Garantia Unveil','gar.head':'Veja o seu site.<br>Decida depois.',
+  'gar.sub':'Zero adiantado. Zero risco. Construímos tudo — você aprova antes de pagar um único centavo.',
+  'gar.s1l':'Sites construídos e entregues','gar.s2l':'Aprovação antes da fatura',
+  'gar.s3n':'4 semanas','gar.s3l':'Do briefing ao site pronto','gar.cta':'Ver o que construímos →',
+  'port.eye':'PORTFÓLIO','port.head':'Empresas que transformamos.','port.sub':'Clique em qualquer card para ver o site ao vivo.','port.view':'Ver site →','port.nda':'Por razões de NDA, não podemos citar todos os nossos parceiros.','port.nda.link':'Solicite informações para ver mais exemplos →',
+  'port.kpi.seven':'Empresa líder no Brasil em expansão de franquias',
+  'port.kpi.sorelle':'Primeiro produtor de aloe vera do Brasil',
+  'port.kpi.creator':'Primeira agência de marketing no Brasil com ecossistema completo',
+  'port.kpi.petlab':'Primeira empresa na América Latina conectando produtores e marcas do setor pet',
+  'modal.txt':'Quer um site assim?','modal.btn':'Iniciar seu projeto →',
+  'a2.eye':'CAPÍTULO 02','a2.head':'Quatro semanas.<br>Um site que dura anos.',
+  'atto2.tagline':'Um time de desenvolvedores sem precedentes ao seu serviço.',
+  'a2.s1':'Briefing &amp; Estratégia','a2.s1t':'1 semana','a2.s2':'Design','a2.s2t':'1 semana',
+  'a2.s3':'Desenvolvimento','a2.s3t':'2 semanas','a2.s4':'Deploy &amp; Entrega','a2.s4t':'1 dia',
+  'ai.line0':'Analisando briefing do cliente...','ai.line1':'Gerando arquitetura do site...',
+  'ai.line2':'Aplicando design system personalizado...','ai.line3':'Construindo componentes interativos...',
+  'ai.line4':'Otimizando para mobile...','ai.line5':'Deploy e testes finais...',
+  'res.eye':'RESULTADOS','res.head':'Números que falam<br>por si mesmos.',
+  'res.l1':'Aumento médio de tráfego','res.l2':'Taxa de conversão média',
+  'res.l3':'Do briefing ao primeiro wireframe','res.l4':'Sites construídos e entregues',
+  'res.quote':'"A Unveil construiu nosso site em 3,5 semanas. Vimos o design completo antes de pagar. O tráfego aumentou 310% nos primeiros dois meses."',
+  'res.author':'Marco Bianchi','res.role':'CEO, Studio Bianchi Imóveis',
+  'a3.eye1':'CAPÍTULO 03','a3.h1':'Este é o nível de<br>detalhe que aplicamos.',
+  'a3.eye2':'PRECISÃO','a3.h2':'Dezenas de componentes.<br>Cada um no seu lugar.',
+  'a3.sub2':'Cada linha de código. Cada pixel. Cada interação. Engenheirado com a mesma precisão de um Grande Complication.',
+  'a3.h3':'O seu site merece<br>esta precisão.',
+  'cta.eye':'COMECE AGORA','cta.head':'O seu site já está<br>sendo <span style="color:var(--accent)">construído.</span>',
+  'cta.sub':'Veja antes de pagar. Zero risco, zero compromisso, zero adiantado.',
+  'cta.ph':'seu@empresa.com','cta.btn':'Ver meu site primeiro →',
+  'cta.disc':'Sem cartão de crédito. Sem contrato. Só o seu novo site.',
+  'ft.tag':'Construímos sites que convertem.<br>Você vê antes de pagar.',
+  'ft.co':'Empresa','ft.leg':'Legal','ft.priv':'Política de Privacidade',
+  'ft.terms':'Termos de Serviço','ft.copy':'© 2026 Unveil Studio. Todos os direitos reservados.',
+  'ai.btn':'Falar com IA','ai.panel.title':'Como podemos ajudar?','ai.panel.sub':'Tire suas dúvidas sobre o processo ou inicie seu projeto agora.',
+},
+en:{
+  'loader.text':'Loading',
+  'nav.portfolio':'Portfolio','nav.process':'How it works','nav.contact':'Contact','nav.cta':'Talk to us →',
+  'a1.eye1':'CHAPTER 01','a1.h1':'This is what your<br>clients see right now.',
+  'a1.eye2':'THE PROBLEM','a1.h2':'Invisible.<br>Forgettable.<br>Losing you leads.',
+  'a1.sub2':"A site that doesn't convert isn't just a missed opportunity. It's your competitor's best salesperson.",
+  'a1.h3':"There's a<br>better way.",'a1.unveiled':'UNVEILED.','a1.unveiled.sub':'You see it first. Then you decide.',
+  'gar.badge':'Unveil Guarantee','gar.head':'See your site.<br>Then decide.',
+  'gar.sub':'Zero upfront. Zero risk. We build it completely — you approve before paying a single euro.',
+  'gar.s1l':'Sites built and delivered','gar.s2l':'Client approval before invoice',
+  'gar.s3n':'4 weeks','gar.s3l':'From brief to finished site','gar.cta':"See what we've built →",
+  'port.eye':'PORTFOLIO','port.head':"Businesses we've transformed.",'port.sub':'Click any card to see the live site.','port.view':'View site →','port.nda':'Due to NDA agreements, we cannot name all our partners.','port.nda.link':'Request information to see more examples →',
+  'port.kpi.seven':'Leading company in Brazil for franchise expansion',
+  'port.kpi.sorelle':'First aloe vera producer in Brazil',
+  'port.kpi.creator':'First marketing agency in Brazil with a complete ecosystem',
+  'port.kpi.petlab':'First company in Latin America connecting producers and brands in the pet sector',
+  'modal.txt':'Want a site like this?','modal.btn':'Start your project →',
+  'a2.eye':'CHAPTER 02','a2.head':'Four weeks.<br>A site that lasts years.',
+  'atto2.tagline':'An unmatched team of developers at your service.',
+  'a2.s1':'Brief &amp; Strategy','a2.s1t':'1 week','a2.s2':'Design','a2.s2t':'1 week',
+  'a2.s3':'Build','a2.s3t':'2 weeks','a2.s4':'Deploy &amp; Handover','a2.s4t':'1 day',
+  'ai.line0':'Analyzing client brief...','ai.line1':'Generating site architecture...',
+  'ai.line2':'Applying custom design system...','ai.line3':'Building interactive components...',
+  'ai.line4':'Optimizing for mobile...','ai.line5':'Deploy and final tests...',
+  'res.eye':'RESULTS','res.head':'Numbers that speak<br>for themselves.',
+  'res.l1':'Average traffic increase','res.l2':'Average conversion rate',
+  'res.l3':'Brief to first wireframe','res.l4':'Sites built and delivered',
+  'res.quote':'"Unveil built our site in 3.5 weeks. We saw the full design before paying anything. Traffic went up 310% in the first two months."',
+  'res.author':'Marco Bianchi','res.role':'CEO, Studio Bianchi Real Estate',
+  'a3.eye1':'CHAPTER 03','a3.h1':'This is the level of<br>detail we bring.',
+  'a3.eye2':'CRAFT','a3.h2':'Dozens of components.<br>Every one in its place.',
+  'a3.sub2':'Every line of code. Every pixel. Every interaction. Engineered with the same precision as a Grande Complication.',
+  'a3.h3':'Your site deserves<br>this precision.',
+  'cta.eye':'GET STARTED','cta.head':'Your site is already<br>being <span style="color:var(--accent)">built.</span>',
+  'cta.sub':'See it before you pay. Zero risk, zero commitment, zero upfront.',
+  'cta.ph':'your@company.com','cta.btn':'See my site first →',
+  'cta.disc':'No credit card. No contract. Just your new site.',
+  'ft.tag':'We build sites that convert.<br>You see it before you pay.',
+  'ft.co':'Company','ft.leg':'Legal','ft.priv':'Privacy Policy',
+  'ft.terms':'Terms of Service','ft.copy':'© 2026 Unveil Studio. All rights reserved.',
+  'ai.btn':'Chat with AI','ai.panel.title':'How can we help?','ai.panel.sub':'Ask us anything about our process or start your project now.',
+},
+it:{
+  'loader.text':'Caricamento',
+  'nav.portfolio':'Portafoglio','nav.process':'Come funziona','nav.contact':'Contatti','nav.cta':'Parla con noi →',
+  'a1.eye1':'CAPITOLO 01','a1.h1':'Questo è quello che<br>vedono i tuoi clienti adesso.',
+  'a1.eye2':'IL PROBLEMA','a1.h2':'Invisibile.<br>Dimenticabile.<br>Perdendo lead.',
+  'a1.sub2':"Un sito che non converte non è solo un'opportunità persa. È il miglior venditore del tuo concorrente.",
+  'a1.h3':'Esiste un<br>modo migliore.','a1.unveiled':'UNVEILED.','a1.unveiled.sub':'Lo vedi prima. Poi decidi.',
+  'gar.badge':'Garanzia Unveil','gar.head':'Vedi il tuo sito.<br>Poi decidi.',
+  'gar.sub':'Zero anticipo. Zero rischio. Lo costruiamo completamente — lo approvi prima di pagare un centesimo.',
+  'gar.s1l':'Siti costruiti e consegnati','gar.s2l':'Approvazione prima della fattura',
+  'gar.s3n':'4 settimane','gar.s3l':'Dal brief al sito finito','gar.cta':'Guarda cosa abbiamo costruito →',
+  'port.eye':'PORTAFOGLIO','port.head':'Aziende che abbiamo trasformato.','port.sub':"Clicca su un'azienda per vedere il sito live.",'port.view':'Vedi sito →','port.nda':'Per accordi di NDA, non possiamo citare tutti i nostri partner.','port.nda.link':'Richiedi informazioni per vedere altri esempi →',
+  'port.kpi.seven':'Azienda leader in Brasile nell\'espansione dei franchising',
+  'port.kpi.sorelle':'Primo produttore di aloe vera in Brasile',
+  'port.kpi.creator':'Prima agenzia di marketing in Brasile con ecosistema completo',
+  'port.kpi.petlab':'Prima azienda in America Latina che connette produttori e marchi nel settore pet',
+  'modal.txt':'Vuoi un sito così?','modal.btn':'Inizia il tuo progetto →',
+  'a2.eye':'CAPITOLO 02','a2.head':'Quattro settimane.<br>Un sito che dura anni.',
+  'atto2.tagline':'Un team di sviluppatori senza precedenti al tuo servizio.',
+  'a2.s1':'Brief &amp; Strategia','a2.s1t':'1 settimana','a2.s2':'Design','a2.s2t':'1 settimana',
+  'a2.s3':'Sviluppo','a2.s3t':'2 settimane','a2.s4':'Deploy &amp; Consegna','a2.s4t':'1 giorno',
+  'ai.line0':'Analisi del brief cliente...','ai.line1':'Generazione architettura sito...',
+  'ai.line2':'Applicazione design system personalizzato...','ai.line3':'Costruzione componenti interattivi...',
+  'ai.line4':'Ottimizzazione per mobile...','ai.line5':'Deploy e test finali...',
+  'res.eye':'RISULTATI','res.head':'Numeri che parlano<br>da soli.',
+  'res.l1':'Aumento medio del traffico','res.l2':'Tasso di conversione medio',
+  'res.l3':'Dal brief al primo wireframe','res.l4':'Siti costruiti e consegnati',
+  'res.quote':'"Unveil ha costruito il nostro sito in 3,5 settimane. Abbiamo visto il design completo prima di pagare. Il traffico è aumentato del 310% nei primi due mesi."',
+  'res.author':'Marco Bianchi','res.role':'CEO, Studio Bianchi Immobiliare',
+  'a3.eye1':'CAPITOLO 03','a3.h1':'Questo è il livello di<br>dettaglio che portiamo.',
+  'a3.eye2':'PRECISIONE','a3.h2':'Decine di componenti.<br>Ognuno al suo posto.',
+  'a3.sub2':'Ogni riga di codice. Ogni pixel. Ogni interazione. Ingegnerizzato con la stessa precisione di un Grande Complication.',
+  'a3.h3':'Il tuo sito merita<br>questa precisione.',
+  'cta.eye':'INIZIA ORA','cta.head':'Il tuo sito è già<br>in <span style="color:var(--accent)">costruzione.</span>',
+  'cta.sub':'Vedilo prima di pagare. Zero rischio, zero impegno, zero anticipo.',
+  'cta.ph':'tuo@azienda.com','cta.btn':'Guarda il mio sito prima →',
+  'cta.disc':'Nessuna carta di credito. Nessun contratto. Solo il tuo nuovo sito.',
+  'ft.tag':'Costruiamo siti che convertono.<br>Lo vedi prima di pagare.',
+  'ft.co':'Azienda','ft.leg':'Legale','ft.priv':'Privacy Policy',
+  'ft.terms':'Termini di Servizio','ft.copy':'© 2026 Unveil Studio. Tutti i diritti riservati.',
+  'ai.btn':'Chatta con IA','ai.panel.title':'Come possiamo aiutarti?','ai.panel.sub':'Fai domande sul processo o avvia il tuo progetto adesso.',
+},
+};
+
+let currentLang = 'pt';
+function setLang(lang) {
+  if (!T[lang]) return;
+  currentLang = lang;
+  const t = T[lang];
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const v = t[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    const v = t[el.dataset.i18nPh];
+    if (v !== undefined) el.placeholder = v;
+  });
+  document.documentElement.lang = lang === 'pt' ? 'pt-BR' : lang;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+  localStorage.setItem('unveil-lang', lang);
+}
+document.querySelectorAll('.lang-btn').forEach(b => b.addEventListener('click', () => setLang(b.dataset.lang)));
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   FRAME LOADING
+═══════════════════════════════════════════════════════════════════════════ */
+const FC = { dc:92, mc:78, dw:76, mw:76 };
+const TOTAL = FC.dc + FC.mc + FC.dw + FC.mw; // 322
+let loaded = 0;
+
+const F = { dc:[], mc:[], dw:[], mw:[] };
+
+function onLoad() {
+  loaded++;
+  const pct = loaded / TOTAL;
+  document.getElementById('loaderFill').style.width = (pct * 100) + '%';
+  document.getElementById('loaderPct').textContent = Math.round(pct * 100) + '%';
+  if (loaded >= TOTAL) initSite();
+}
+
+function loadSet(key, dir) {
+  const n = FC[key];
+  for (let i = 1; i <= n; i++) {
+    const img = new Image();
+    img.onload = img.onerror = onLoad;
+    img.src = `assets/frames/${dir}/frame_${String(i).padStart(4,'0')}.jpg`;
+    F[key].push(img);
+  }
+}
+
+loadSet('dc','desktop-computer');
+loadSet('mc','mobile-computer');
+loadSet('dw','desktop-orologio');
+loadSet('mw','mobile-orologio');
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CANVAS SETUP
+═══════════════════════════════════════════════════════════════════════════ */
+const cvs = {
+  dc: document.getElementById('desktopCanvas'),
+  mc: document.getElementById('mobileCanvas'),
+  dw: document.getElementById('watchDesktop'),
+  mw: document.getElementById('watchMobile'),
+};
+
+function setupCanvas(c) {
+  const dpr = window.devicePixelRatio || 1;
+  const w = window.innerWidth, h = window.innerHeight;
+  c.width = w * dpr; c.height = h * dpr;
+  c.style.width = w + 'px'; c.style.height = h + 'px';
+  const ctx = c.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return ctx;
+}
+
+const ctxs = {};
+function setupAllCanvases() {
+  ctxs.dc = setupCanvas(cvs.dc);
+  ctxs.mc = setupCanvas(cvs.mc);
+  ctxs.dw = setupCanvas(cvs.dw);
+  ctxs.mw = setupCanvas(cvs.mw);
+}
+setupAllCanvases();
+window.addEventListener('resize', () => {
+  setupAllCanvases();
+  renderAtto1(lastA1Progress);
+  renderAtto3(lastA3Progress);
+}, { passive: true });
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DRAW FRAME
+═══════════════════════════════════════════════════════════════════════════ */
+/* Desktop: frame on right side, vertically centred */
+function drawFrame(ctx, img) {
+  const W = window.innerWidth, H = window.innerHeight;
+  ctx.clearRect(0, 0, W, H);
+  if (!img || !img.complete || !img.naturalWidth) return;
+
+  const targetW = W * 0.60;
+  const targetH = H * 0.90;
+  const targetX = W * 0.38;
+  const targetY = (H - targetH) / 2;
+
+  const imgRatio = img.naturalWidth / img.naturalHeight;
+  const boxRatio  = targetW / targetH;
+  let drawW, drawH, drawX, drawY;
+  if (imgRatio > boxRatio) {
+    drawW = targetW; drawH = targetW / imgRatio;
+    drawX = targetX; drawY = targetY + (targetH - drawH) / 2;
+  } else {
+    drawH = targetH; drawW = targetH * imgRatio;
+    drawX = targetX + (targetW - drawW) / 2; drawY = targetY;
+  }
+  ctx.drawImage(img, drawX, drawY, drawW, drawH);
+}
+
+/* Mobile: frame top half, full width */
+function drawFrameMobile(ctx, img) {
+  const W = window.innerWidth, H = window.innerHeight;
+  ctx.clearRect(0, 0, W, H);
+  if (!img || !img.complete || !img.naturalWidth) return;
+
+  const targetW = W * 0.92;
+  const targetH = H * 0.48;
+  const targetX = W * 0.04;
+  const targetY = H * 0.04;
+
+  const imgRatio = img.naturalWidth / img.naturalHeight;
+  const boxRatio  = targetW / targetH;
+  let drawW, drawH, drawX, drawY;
+  if (imgRatio > boxRatio) {
+    drawW = targetW; drawH = targetW / imgRatio;
+    drawX = targetX; drawY = targetY + (targetH - drawH) / 2;
+  } else {
+    drawH = targetH; drawW = targetH * imgRatio;
+    drawX = targetX + (targetW - drawW) / 2; drawY = targetY;
+  }
+  ctx.drawImage(img, drawX, drawY, drawW, drawH);
+}
+
+/* Edge vignette — blends frame into section background */
+function drawVignette(ctx, bgColor) {
+  const W = window.innerWidth, H = window.innerHeight;
+  const size = Math.min(W, H) * 0.22;
+  const dirs = [
+    { x0:0,y0:0,x1:size,y1:0 },       // left
+    { x0:W,y0:0,x1:W-size,y1:0 },      // right
+    { x0:0,y0:0,x1:0,y1:size },        // top
+    { x0:0,y0:H,x1:0,y1:H-size },      // bottom
+  ];
+  dirs.forEach(d => {
+    const g = ctx.createLinearGradient(d.x0, d.y0, d.x1, d.y1);
+    g.addColorStop(0, bgColor);
+    g.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, W, H);
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SCROLL — ATTO I
+═══════════════════════════════════════════════════════════════════════════ */
+const mob = () => window.innerWidth < 768;
+let lastA1Progress = 0, a1Frame = -1, a1Tick = false;
+
+const A1_OVERLAYS = [
+  { id:'ov1', show:.08, hide:.38 },
+  { id:'ov2', show:.38, hide:.67 },
+  { id:'ov3', show:.67, hide:.84 },
+  { id:'ovU', show:.84, hide:1.01 },
+];
+
+function renderAtto1(p) {
+  lastA1Progress = p;
+  const isMob = mob();
+  const frames = isMob ? F.mc : F.dc;
+  const ctx    = isMob ? ctxs.mc : ctxs.dc;
+  const idx = Math.min(frames.length - 1, Math.max(0, Math.round(p * (frames.length - 1))));
+  if (idx !== a1Frame) {
+    a1Frame = idx;
+    const img = frames[idx];
+    if (img && img.complete && img.naturalWidth) {
+      isMob ? drawFrameMobile(ctx, img) : drawFrame(ctx, img);
+      drawVignette(ctx, 'rgba(10,10,10,1)');
+    }
+  }
+  // Fade canvas out as UNVEILED. takes over
+  const cEl = isMob ? cvs.mc : cvs.dc;
+  cEl.style.opacity = p > 0.88 ? Math.max(0, 1 - (p - 0.88) / 0.10) : '1';
+  A1_OVERLAYS.forEach(o => {
+    document.getElementById(o.id).classList.toggle('visible', p >= o.show && p < o.hide);
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SCROLL — ATTO III
+═══════════════════════════════════════════════════════════════════════════ */
+let lastA3Progress = 0, a3Frame = -1, a3Tick = false;
+
+const A3_OVERLAYS = [
+  { id:'wo1', show:.08, hide:.45 },
+  { id:'wo2', show:.45, hide:.80 },
+  { id:'wo3', show:.80, hide:1.01 },
+];
+
+function renderAtto3(p) {
+  lastA3Progress = p;
+  const isMob = mob();
+  const frames = isMob ? F.mw : F.dw;
+  const ctx    = isMob ? ctxs.mw : ctxs.dw;
+  const idx = Math.min(frames.length - 1, Math.max(0, Math.round(p * (frames.length - 1))));
+  if (idx !== a3Frame) {
+    a3Frame = idx;
+    const img = frames[idx];
+    if (img && img.complete && img.naturalWidth) {
+      isMob ? drawFrameMobile(ctx, img) : drawFrame(ctx, img);
+      drawVignette(ctx, 'rgba(255,255,255,1)');
+    }
+  }
+  A3_OVERLAYS.forEach(o => {
+    document.getElementById(o.id).classList.toggle('visible', p >= o.show && p < o.hide);
+  });
+}
+
+function getSectionProgress(id) {
+  const s = document.getElementById(id);
+  if (!s) return 0;
+  const rect = s.getBoundingClientRect();
+  const scrollable = s.offsetHeight - window.innerHeight;
+  return scrollable > 0 ? Math.min(1, Math.max(0, -rect.top / scrollable)) : 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MASTER SCROLL HANDLER
+═══════════════════════════════════════════════════════════════════════════ */
+function onScroll() {
+  // Progress bar
+  const pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+  document.getElementById('scrollBar').style.width = pct + '%';
+  // Navbar
+  document.getElementById('navbar').classList.toggle('nav-scrolled', window.scrollY > 80);
+  // Dot nav
+  updateDotNav();
+  // Atto I
+  if (!a1Tick) {
+    a1Tick = true;
+    requestAnimationFrame(() => { renderAtto1(getSectionProgress('atto1')); a1Tick = false; });
+  }
+  // Atto III
+  if (!a3Tick) {
+    a3Tick = true;
+    requestAnimationFrame(() => { renderAtto3(getSectionProgress('atto3')); a3Tick = false; });
+  }
+}
+window.addEventListener('scroll', onScroll, { passive: true });
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DOT NAV
+═══════════════════════════════════════════════════════════════════════════ */
+const DOT_SECTIONS = ['atto1','garantia','portfolio','atto2','results','atto3','cta'];
+function updateDotNav() {
+  let cur = DOT_SECTIONS[0];
+  DOT_SECTIONS.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && window.scrollY >= el.offsetTop - window.innerHeight * .4) cur = id;
+  });
+  document.querySelectorAll('.dot-item').forEach(d => d.classList.toggle('active', d.dataset.section === cur));
+  document.getElementById('dotNav').classList.toggle('on-white', cur === 'atto3');
+}
+document.querySelectorAll('.dot-item').forEach(d => {
+  d.addEventListener('click', () => {
+    const t = document.getElementById(d.dataset.section);
+    if (t) window.scrollTo({ top: t.offsetTop, behavior: 'smooth' });
+  });
+});
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   GARANTIA WAVE REVEAL
+═══════════════════════════════════════════════════════════════════════════ */
+// garantia wave reveal removed — section is always visible
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   COUNT-UP
+═══════════════════════════════════════════════════════════════════════════ */
+function easeOut(t) { return 1 - Math.pow(2, -10 * t) }
+
+function countUp(el, target, prefix, suffix, dur) {
+  const start = performance.now();
+  const isFloat = target % 1 !== 0;
+  function step(now) {
+    const p = Math.min((now - start) / dur, 1);
+    const v = easeOut(p) * target;
+    el.textContent = (prefix||'') + (isFloat ? v.toFixed(1) : Math.floor(v)) + (suffix||'');
+    if (p < 1) requestAnimationFrame(step);
+    else el.textContent = (prefix||'') + target + (suffix||'');
+  }
+  requestAnimationFrame(step);
+}
+
+// Garantia stats
+new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    countUp(document.getElementById('gs1'), 70, '+', '', 1800);
+    countUp(document.getElementById('gs2'), 100, '', '%', 1600);
+    e.target.disconnect && e.target.disconnect();
+  });
+}, { threshold: .4 }).observe(document.getElementById('garantia'));
+
+// Results stats
+new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.querySelectorAll('.res-num').forEach((el, i) => {
+      const target = parseFloat(el.dataset.target);
+      const prefix = el.dataset.prefix || '';
+      const suffix = el.dataset.suffix || '';
+      setTimeout(() => countUp(el, target, prefix, suffix, 2000), i * 200);
+    });
+  });
+}, { threshold: .3 }).observe(document.getElementById('resGrid'));
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ATTO II — AI SCREEN ANIMATION
+═══════════════════════════════════════════════════════════════════════════ */
+const AI_STATES = [
+  { activeIndex:1, progress:18, label:'18%' },
+  { activeIndex:2, progress:42, label:'42%' },
+  { activeIndex:3, progress:73, label:'73%' },
+  { activeIndex:5, progress:100, label:'100% ✓', showPreview:true },
+];
+
+function updateAiScreen(phase) {
+  const state = AI_STATES[Math.min(phase, 3)];
+  document.querySelectorAll('.ai-line').forEach((line, i) => {
+    line.className = 'ai-line';
+    if (i < state.activeIndex) {
+      line.classList.add('ai-line--done');
+      const chk = line.querySelector('.ai-check');
+      if (chk) chk.textContent = '✓';
+    } else if (i === state.activeIndex) {
+      line.classList.add('ai-line--active');
+    } else {
+      line.classList.add('ai-line--pending');
+    }
+  });
+  const fill = document.getElementById('aiProgressFill');
+  const label = document.getElementById('aiProgressLabel');
+  if (fill) fill.style.width = state.progress + '%';
+  if (label) label.textContent = state.label;
+  const preview = document.getElementById('aiPreviewArea');
+  if (preview) preview.classList.toggle('visible', !!state.showPreview);
+}
+
+function triggerPhase(n) {
+  document.querySelectorAll('.proc-step').forEach(el => el.classList.toggle('active', parseInt(el.dataset.phase) === n));
+  updateAiScreen(n);
+}
+
+let a2Phase = -1;
+function updateAtto2Phase() {
+  const section = document.getElementById('atto2');
+  if (!section) return;
+  const rect = section.getBoundingClientRect();
+  const sectionH = section.offsetHeight;
+  const progress = Math.max(0, Math.min(1, -rect.top / (sectionH - window.innerHeight)));
+  let phase;
+  if (progress < 0.25) phase = 0;
+  else if (progress < 0.50) phase = 1;
+  else if (progress < 0.75) phase = 2;
+  else phase = 3;
+  if (phase !== a2Phase) { a2Phase = phase; triggerPhase(phase); }
+}
+window.addEventListener('scroll', updateAtto2Phase, { passive: true });
+
+document.querySelectorAll('.proc-step').forEach((step, index) => {
+  step.style.cursor = 'pointer';
+  step.addEventListener('click', () => triggerPhase(index));
+});
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   NAVBAR — LIGHT SECTION DETECTION
+═══════════════════════════════════════════════════════════════════════════ */
+let lightCount = 0;
+['portfolio','results'].forEach(id => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      lightCount = Math.max(0, lightCount + (e.isIntersecting ? 1 : -1));
+      document.getElementById('navbar').classList.toggle('nav-on-light', lightCount > 0);
+    });
+  }, { threshold: 0.05 }).observe(el);
+});
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PORTFOLIO MODAL
+═══════════════════════════════════════════════════════════════════════════ */
+function openModal(card) {
+  if (card.classList.contains('nda')) return;
+  document.getElementById('mSec').textContent = card.dataset.sector;
+  document.getElementById('mNm').textContent = card.querySelector('.card-nm').textContent;
+  document.getElementById('mKpi').textContent = card.dataset.kpi;
+  document.getElementById('mFrame').src = card.dataset.url;
+  document.getElementById('portModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  lucide.createIcons();
+}
+function closeModal(e) {
+  if (e && e.target !== document.getElementById('portModal') && !e.target.closest('.modal-close')) return;
+  document.getElementById('portModal').classList.remove('open');
+  document.getElementById('mFrame').src = '';
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   AI WIDGET
+═══════════════════════════════════════════════════════════════════════════ */
+function toggleAI() { document.getElementById('aiPanel').classList.toggle('open'); }
+setTimeout(() => document.getElementById('aiWidget').classList.add('visible'), 3000);
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CTA FORM
+═══════════════════════════════════════════════════════════════════════════ */
+document.getElementById('ctaBtn').addEventListener('click', () => {
+  const email = document.getElementById('ctaEmail').value;
+  if (!email || !email.includes('@')) {
+    document.getElementById('ctaEmail').style.borderColor = 'rgba(255,80,80,.6)';
+    return;
+  }
+  document.getElementById('ctaEmail').style.borderColor = 'rgba(var(--accent-rgb),.5)';
+  const btn = document.getElementById('ctaBtn');
+  btn.textContent = '✓ ' + (currentLang === 'pt' ? 'Enviado!' : currentLang === 'en' ? 'Sent!' : 'Inviato!');
+  setTimeout(() => { btn.innerHTML = T[currentLang]['cta.btn']; }, 3000);
+});
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   INIT — called when all frames loaded
+═══════════════════════════════════════════════════════════════════════════ */
+function initSite() {
+  const loader = document.getElementById('loader');
+  loader.classList.add('hide');
+  setTimeout(() => { loader.style.display = 'none'; }, 700);
+  // Apply portfolio card images if files exist
+  document.querySelectorAll('.port-card[data-image]').forEach(card => {
+    const prev = card.querySelector('.card-prev');
+    if (!prev) return;
+    prev.style.setProperty('--card-img', `url(${card.dataset.image})`);
+    prev.setAttribute('data-image', card.dataset.image);
+  });
+  renderAtto1(0);
+  renderAtto3(0);
+  updateDotNav();
+  lucide.createIcons();
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BOOT
+═══════════════════════════════════════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', () => {
+  const saved = localStorage.getItem('unveil-lang') || 'pt';
+  setLang(saved);
+  lucide.createIcons();
+});
+</script>
+</body>
+</html>
