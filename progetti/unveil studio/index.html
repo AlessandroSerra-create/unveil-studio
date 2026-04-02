@@ -1195,27 +1195,31 @@ function drawFrameMobileComputer(ctx, img) {
   ctx.drawImage(img, drawX, drawY, drawW, drawH);
 }
 
-/* Mobile: watch animation — frame near top */
-function drawFrameMobileWatch(ctx, img) {
-  const W = window.innerWidth, H = window.innerHeight;
-  ctx.clearRect(0, 0, W, H);
-  if (!img || !img.complete || !img.naturalWidth) return;
+/* Mobile: watch animation — smaller, pushed higher */
+function drawFrameMobileWatch(canvas, ctx, img) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  const targetW = W * 0.92;
-  const targetH = H * 0.48;
-  const targetX = W * 0.04;
-  const targetY = H * 0.04;
+  const targetW = canvas.width * 0.55;
+  const targetH = canvas.height * 0.42;
+  const targetX = (canvas.width - targetW) / 2;
+  const targetY = canvas.height * -0.05;
 
   const imgRatio = img.naturalWidth / img.naturalHeight;
-  const boxRatio  = targetW / targetH;
+  const boxRatio = targetW / targetH;
   let drawW, drawH, drawX, drawY;
+
   if (imgRatio > boxRatio) {
-    drawW = targetW; drawH = targetW / imgRatio;
-    drawX = targetX; drawY = targetY + (targetH - drawH) / 2;
+    drawW = targetW;
+    drawH = targetW / imgRatio;
+    drawX = targetX;
+    drawY = targetY + (targetH - drawH) / 2;
   } else {
-    drawH = targetH; drawW = targetH * imgRatio;
-    drawX = targetX + (targetW - drawW) / 2; drawY = targetY;
+    drawH = targetH;
+    drawW = targetH * imgRatio;
+    drawX = targetX + (targetW - drawW) / 2;
+    drawY = targetY;
   }
+
   ctx.drawImage(img, drawX, drawY, drawW, drawH);
 }
 
@@ -1294,7 +1298,7 @@ function renderAtto3(p) {
     a3Frame = idx;
     const img = frames[idx];
     if (img && img.complete && img.naturalWidth) {
-      isMob ? drawFrameMobileWatch(ctx, img) : drawFrame(ctx, img);
+      isMob ? drawFrameMobileWatch(cvs.mw, ctx, img) : drawFrame(ctx, img);
       drawVignette(ctx, 'rgba(255,255,255,1)');
     }
   }
